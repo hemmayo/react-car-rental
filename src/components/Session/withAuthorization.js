@@ -9,7 +9,12 @@ const withAuthorization = condition => Component => {
   class WithAuthorization extends React.Component {
     componentDidMount() {
       this.listener = this.props.firebase.auth.onAuthStateChanged(authUser => {
-        if (!condition(authUser)) {
+        if (condition(authUser)) {
+          const { pathname } = this.props.location;
+          if (pathname === ROUTES.SIGNIN || pathname === ROUTES.SIGNUP) {
+            this.props.history.push(ROUTES.DASHBOARD);
+          }
+        } else {
           this.props.history.push(ROUTES.SIGNIN);
         }
       });

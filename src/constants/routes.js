@@ -8,4 +8,5 @@ export const PASSWORDFORGET = "pw-forget";
 export const PROFILE = "profile";
 export const SIGNIN = "/signin";
 export const SIGNUP = "/signup";
+export const SIGNOUT = "/signout";
 export const SETTINGS = "/settings";

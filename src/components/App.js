@@ -5,6 +5,7 @@ import Navigation from "./Navigation";
 import LandingPage from "../pages/Landing";
 import SignUpPage from "../pages/SignUp";
 import SignInPage from "../pages/SignIn";
+import SignOutPage from "../pages/SignOut";
 import PasswordForgetPage from "../pages/PasswordForget";
 import DashboardPage from "../pages/Dashboard";
 import AboutPage from "../pages/About";
@@ -24,6 +25,7 @@ class App extends Component {
         <Route exact path={ROUTES.LANDING} component={LandingPage} />
         <Route path={ROUTES.SIGNUP} component={SignUpPage} />
         <Route path={ROUTES.SIGNIN} component={SignInPage} />
+        <Route path={ROUTES.SIGNOUT} component={SignOutPage} />
         <Route path={ROUTES.PASSWORDFORGET} component={PasswordForgetPage} />
         <Route path={ROUTES.DASHBOARD} component={DashboardPage} />
         <Route path={ROUTES.ABOUT} component={AboutPage} />

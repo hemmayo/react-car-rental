@@ -3,6 +3,7 @@ import { NavLink } from "react-router-dom";
 
 import * as ROUTES from "../../constants/routes";
 import { AuthUserContext } from "../Session";
+import { withFirebase } from "../Firebase";
 
 const UserNav = () => (
   <>
@@ -48,7 +49,7 @@ const UserNav = () => (
             </li>
             <li className="uk-nav-divider"></li>
             <li>
-              <NavLink to={ROUTES.DASHBOARD}>Sign out</NavLink>
+              <NavLink to={ROUTES.SIGNOUT}>Sign out</NavLink>
             </li>
           </ul>
         </div>
@@ -79,7 +80,7 @@ const GuestNav = () => (
     </li>
   </ul>
 );
-export default class Navigation extends Component {
+class Navigation extends Component {
   render() {
     return (
       <AuthUserContext.Consumer>
@@ -97,3 +98,5 @@ export default class Navigation extends Component {
     );
   }
 }
+
+export default withFirebase(Navigation);
