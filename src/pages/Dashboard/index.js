@@ -1,7 +1,15 @@
 import React, { Component } from "react";
+import Layout from "../../components/Layout";
 
-export default class Dashboard extends Component {
+class Dashboard extends Component {
   render() {
-    return <div></div>;
+    return (
+      <Layout>
+        <h1>Hello world</h1>
+      </Layout>
+    );
   }
 }
+
+const condition = authUser => !!authUser;
+export default withAuthorization(condition)(Dashboard);

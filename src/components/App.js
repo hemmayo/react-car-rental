@@ -29,7 +29,6 @@ class App extends Component {
         <Route path={ROUTES.CONTACT} component={ContactPage} />
         <Route path={ROUTES.HIREDRIVER} component={HireDriverPage} />
         <Route path={ROUTES.BOOKRIDE} component={BookRidePage} />
-        <p>hi</p>hello
       </Router>
     );
   }

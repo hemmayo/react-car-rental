@@ -13,7 +13,6 @@ const config = {
   appId: process.env.REACT_APP_APP_ID
 };
 
-console.log(config);
 class Firebase {
   constructor() {
     app.initializeApp(config);
