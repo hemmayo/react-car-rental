@@ -1,28 +1,18 @@
 import React from "react";
-import { Layout } from "antd";
 import Navigation from "./Navigation";
-
-const { Header, Content, Footer } = Layout;
+import "../styles/tailwind.css";
 
 const PageLayout = ({ children }) => (
-  <Layout className="layout">
+  <div
+    className="font-sans flex flex-col justify-between"
+    style={{ minHeight: "100vh" }}
+  >
     <Navigation />
-    <Content>
-      <div
-        style={{
-          width: "100%",
-          padding: 24,
-          minHeight: 280,
-          margin: "0 auto"
-        }}
-      >
-        {children}
-      </div>
-    </Content>
-    <Footer style={{ textAlign: "center" }}>
+    <main className="flex justify-center items-center">{children}</main>
+    <footer className="uk-padding uk-background-muted uk-text-center">
       ©2019 Car Rental created by Emma Popoola
-    </Footer>
-  </Layout>
+    </footer>
+  </div>
 );
 
 export default PageLayout;

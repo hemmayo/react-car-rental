@@ -3,10 +3,15 @@ import ReactDOM from "react-dom";
 import App from "./components/App";
 import Firebase, { FirebaseContext } from "./components/Firebase";
 
+import UIkit from "uikit";
+import Icons from "uikit/dist/js/uikit-icons";
+import "uikit/dist/css/uikit.min.css";
 import "./styles/tailwind.css";
 
 import * as serviceWorker from "./serviceWorker";
 
+// loads the Icon plugin
+UIkit.use(Icons);
 ReactDOM.render(
   <FirebaseContext.Provider value={new Firebase()}>
     <App />

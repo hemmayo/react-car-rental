@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import { withFirebase } from "../Firebase";
-import { Input, Button, Icon, Alert } from "antd";
 
 const INITIAL_STATE = {
   email: "",
@@ -32,7 +31,7 @@ class SignInForm extends Component {
 
     return (
       <form onSubmit={this.handleSubmit}>
-        <div className="px-4 pb-4">
+        <div className="pb-4">
           <label htmlFor="email" className="text-sm block font-bold  pb-2">
             E-mail Address
           </label>
@@ -45,9 +44,9 @@ class SignInForm extends Component {
             placeholder="you@example.com"
           />
         </div>
-        <div className="px-4 pb-4">
+        <div className="pb-4">
           <label htmlFor="password" className="text-sm block font-bold pb-2">
-            PASSWORD
+            Password
           </label>
           <input
             type="password"
@@ -58,15 +57,22 @@ class SignInForm extends Component {
             placeholder="Enter your password"
           />
         </div>
-        <div>
+
+        <div className="pb-4">
           <button
             className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-            type="button"
+            type="submit"
           >
             Sign In
           </button>
         </div>
-        {error && <Alert message={error.message} type="error" />}
+
+        {error && (
+          <div className="uk-alert uk-alert-danger" uk-alert="true">
+            <a className="uk-alert-close" uk-close="true"></a>
+            <p>{error.message}</p>
+          </div>
+        )}
       </form>
     );
   }
