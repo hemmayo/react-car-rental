@@ -1,7 +1,11 @@
 import React, { Component } from "react";
+import { withAuthorization } from "../../components/Session";
 
-export default class BookRide extends Component {
+class BookRide extends Component {
   render() {
-    return <div></div>;
+    return <div>Hello</div>;
   }
 }
+
+const condition = authUser => !!authUser;
+export default withAuthorization(condition)(BookRide);

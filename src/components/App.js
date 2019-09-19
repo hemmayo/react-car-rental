@@ -1,6 +1,7 @@
 import React, { Component } from "react";
+import { compose } from "recompose";
 
-import Navigation from "../Navigation";
+import Navigation from "./Navigation";
 import LandingPage from "../pages/Landing";
 import SignUpPage from "../pages/SignUp";
 import SignInPage from "../pages/SignIn";
@@ -13,8 +14,9 @@ import BookRidePage from "../pages/BookRide";
 
 import { BrowserRouter as Router, Route } from "react-router-dom";
 import * as ROUTES from "../constants/routes";
+import { withAuthentication } from "./Session";
 
-export default class App extends Component {
+class App extends Component {
   render() {
     return (
       <Router>
@@ -27,7 +29,10 @@ export default class App extends Component {
         <Route path={ROUTES.CONTACT} component={ContactPage} />
         <Route path={ROUTES.HIREDRIVER} component={HireDriverPage} />
         <Route path={ROUTES.BOOKRIDE} component={BookRidePage} />
+        <p>hi</p>hello
       </Router>
     );
   }
 }
+
+export default withAuthentication(App);
