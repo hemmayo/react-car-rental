@@ -7,7 +7,7 @@ const PageLayout = ({ children }) => (
     style={{ minHeight: "100vh" }}
   >
     <Navigation />
-    <main className="flex flex-col justify-center items-center text-primary">
+    <main className="flex flex-col justify-center items-center text-primary p-4">
       {children}
     </main>
     <footer className="uk-padding uk-background-muted uk-text-center">
