@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import Layout from "../../components/Layout";
+import { withAuthorization } from "../../components/Session";
 
 class Dashboard extends Component {
   render() {
