@@ -4,24 +4,29 @@ import * as ROUTES from "../../constants/routes";
 import { withFirebase } from "../Firebase";
 
 const INITIAL_STATE = {
+  username: "",
   email: "",
   password: "",
+  confirmPassword: "",
   error: null
 };
 
-class SignInForm extends Component {
+class SignUpForm extends Component {
   state = { ...INITIAL_STATE };
 
   handleSubmit = evt => {
     evt.preventDefault();
-    const { email, password } = this.state;
+    const { email, password, username } = this.state;
 
     this.setState({ error: null });
 
     this.props.firebase
-      .doSignInWithEmailAndPassword(email, password)
+      .doCreateUserWithEmailAndPassword(email, password)
       .then(authUser => {
-        console.log(authUser);
+        return this.props.firebase.user(authUser.user.uid).set({
+          username,
+          email
+        });
       })
       .catch(e => this.setState({ error: e }));
   };
@@ -31,14 +36,31 @@ class SignInForm extends Component {
   };
 
   render() {
-    const { email, password, error } = this.state;
-    const isInvalid = email === "" || password === "";
+    const { username, email, password, confirmPassword, error } = this.state;
+    const isInvalid =
+      username === "" ||
+      email === "" ||
+      password === "" ||
+      password !== confirmPassword;
 
     return (
       <form onSubmit={this.handleSubmit}>
-        <h1 className="text-3xl font-bold mb-4">Log in</h1>
+        <h1 className="text-3xl font-bold mb-4">Create an account</h1>
         <div className="pb-4">
-          <label htmlFor="email" className="text-sm block font-bold  pb-2">
+          <label htmlFor="email" className="text-sm block font-bold pb-2">
+            Your Name
+          </label>
+          <input
+            type="text"
+            name="username"
+            onChange={this.handleChange}
+            value={username}
+            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline border-blue-300 "
+            placeholder="e.g John Khalid"
+          />
+        </div>
+        <div className="pb-4">
+          <label htmlFor="email" className="text-sm block font-bold pb-2">
             E-mail Address
           </label>
           <input
@@ -63,6 +85,19 @@ class SignInForm extends Component {
             placeholder="Enter your password"
           />
         </div>
+        <div className="pb-4">
+          <label htmlFor="password" className="text-sm block font-bold pb-2">
+            Confirm Password
+          </label>
+          <input
+            type="password"
+            name="confirmPassword"
+            onChange={this.handleChange}
+            value={confirmPassword}
+            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline border-blue-300"
+            placeholder="Re-enter password"
+          />
+        </div>
 
         <div className="flex justify-between items-center pb-4">
           <button
@@ -72,10 +107,10 @@ class SignInForm extends Component {
             type="submit"
             disabled={isInvalid}
           >
-            Sign In
+            Sign Up
           </button>
           <p>
-            Don't have an account? <Link to={ROUTES.SIGNUP}>Create one</Link>
+            Have an account? <Link to={ROUTES.SIGNIN}>Sign in</Link>
           </p>
         </div>
 
@@ -89,4 +124,4 @@ class SignInForm extends Component {
   }
 }
 
-export default withFirebase(SignInForm);
+export default withFirebase(SignUpForm);

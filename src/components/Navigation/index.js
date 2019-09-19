@@ -23,9 +23,9 @@ const UserNav = () => (
     </ul>
     <ul className="uk-navbar-nav">
       <li>
-        <NavLink className="flex ">
+        <NavLink to={ROUTES.PROFILE} className="flex ">
           <img
-            class="w-10 h-10 rounded-full mr-4"
+            className="w-10 h-10 rounded-full mr-4"
             src="https://img.icons8.com/bubbles/50/000000/car.png"
             alt="Jonathan Reinink"
           />
