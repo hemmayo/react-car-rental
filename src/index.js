@@ -3,6 +3,8 @@ import ReactDOM from "react-dom";
 import App from "./components/App";
 import Firebase, { FirebaseContext } from "./components/Firebase";
 
+import "./styles/tailwind.css";
+
 import * as serviceWorker from "./serviceWorker";
 
 ReactDOM.render(

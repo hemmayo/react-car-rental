@@ -32,27 +32,40 @@ class SignInForm extends Component {
 
     return (
       <form onSubmit={this.handleSubmit}>
-        <Input
-          placeholder="E-mail address"
-          prefix={<Icon type="mail" style={{ color: "rgba(0,0,0,.25)" }} />}
-          value={email}
-          type="email"
-          name="email"
-          onChange={this.handleChange}
-        />
-
-        <Input
-          placeholder="Password"
-          prefix={<Icon type="lock" style={{ color: "rgba(0,0,0,.25)" }} />}
-          value={password}
-          name="password"
-          type="password"
-          onChange={this.handleChange}
-        />
-
-        <Button type="primary" onClick={this.handleSubmit}>
-          Log in
-        </Button>
+        <div className="px-4 pb-4">
+          <label htmlFor="email" className="text-sm block font-bold  pb-2">
+            E-mail Address
+          </label>
+          <input
+            type="email"
+            name="email"
+            onChange={this.handleChange}
+            value={email}
+            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline border-blue-300 "
+            placeholder="you@example.com"
+          />
+        </div>
+        <div className="px-4 pb-4">
+          <label htmlFor="password" className="text-sm block font-bold pb-2">
+            PASSWORD
+          </label>
+          <input
+            type="password"
+            name="password"
+            onChange={this.handleChange}
+            value={password}
+            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline border-blue-300"
+            placeholder="Enter your password"
+          />
+        </div>
+        <div>
+          <button
+            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+            type="button"
+          >
+            Sign In
+          </button>
+        </div>
         {error && <Alert message={error.message} type="error" />}
       </form>
     );
