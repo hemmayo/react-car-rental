@@ -1,0 +1,7 @@
+.uk-navbar-nav > li > a {
+  color: #cbd5e0;
+}
+
+.uk-navbar-nav > li > a.active {
+  color: #edf2f7;
+}

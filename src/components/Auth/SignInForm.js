@@ -14,6 +14,8 @@ class SignInForm extends Component {
     evt.preventDefault();
     const { email, password } = this.state;
 
+    this.setState({ error: null });
+
     this.props.firebase
       .doSignInWithEmailAndPassword(email, password)
       .then(authUser => {
@@ -28,9 +30,11 @@ class SignInForm extends Component {
 
   render() {
     const { email, password, error } = this.state;
+    const isInvalid = email === "" || password === "";
 
     return (
       <form onSubmit={this.handleSubmit}>
+        <h1 className="text-3xl font-bold mb-4">Log in</h1>
         <div className="pb-4">
           <label htmlFor="email" className="text-sm block font-bold  pb-2">
             E-mail Address
@@ -60,8 +64,11 @@ class SignInForm extends Component {
 
         <div className="pb-4">
           <button
-            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+            className={`bg-blue-${isInvalid ? "3" : "5"}00 hover:bg-blue-${
+              isInvalid ? "4" : "7"
+            }00 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline`}
             type="submit"
+            disabled={isInvalid}
           >
             Sign In
           </button>
@@ -69,7 +76,6 @@ class SignInForm extends Component {
 
         {error && (
           <div className="uk-alert uk-alert-danger" uk-alert="true">
-            <a className="uk-alert-close" uk-close="true"></a>
             <p>{error.message}</p>
           </div>
         )}

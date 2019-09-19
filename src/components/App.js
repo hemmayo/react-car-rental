@@ -11,6 +11,7 @@ import AboutPage from "../pages/About";
 import ContactPage from "../pages/Contact";
 import HireDriverPage from "../pages/HireDriver";
 import BookRidePage from "../pages/BookRide";
+import SettingsPage from "../pages/Settings";
 
 import { BrowserRouter as Router, Route } from "react-router-dom";
 import * as ROUTES from "../constants/routes";
@@ -29,6 +30,7 @@ class App extends Component {
         <Route path={ROUTES.CONTACT} component={ContactPage} />
         <Route path={ROUTES.HIREDRIVER} component={HireDriverPage} />
         <Route path={ROUTES.BOOKRIDE} component={BookRidePage} />
+        <Route path={ROUTES.SETTINGS} component={SettingsPage} />
       </Router>
     );
   }

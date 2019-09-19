@@ -7,4 +7,4 @@ export const HIREDRIVER = "/hire-driver";
 export const PASSWORDFORGET = "pw-forget";
 export const SIGNIN = "/signin";
 export const SIGNUP = "/signup";
-export const SETTIGNS = "/settings";
+export const SETTINGS = "/settings";
