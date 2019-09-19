@@ -7,7 +7,9 @@ const PageLayout = ({ children }) => (
     style={{ minHeight: "100vh" }}
   >
     <Navigation />
-    <main className=" flex justify-center items-center">{children}</main>
+    <main className="flex flex-col justify-center items-center text-primary">
+      {children}
+    </main>
     <footer className="uk-padding uk-background-muted uk-text-center">
       ©2019 Car Rental created by Emma Popoola
     </footer>
