@@ -7,7 +7,12 @@ import { withAuthorization } from "../../components/Session";
 
 class SignOut extends Component {
   componentDidMount() {
-    this.props.firebase.doSignOut();
+    this.listener = this.props.firebase.doSignOut;
+    this.listener();
+  }
+
+  componentWillUnmount() {
+    this.listener();
   }
   render() {
     return (

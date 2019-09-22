@@ -5,7 +5,7 @@ import * as ROUTES from "../../constants/routes";
 import { AuthUserContext } from "../Session";
 import { withFirebase } from "../Firebase";
 
-const UserNav = () => (
+const UserNav = props => (
   <>
     <ul className="uk-navbar-nav">
       <li>
@@ -49,7 +49,7 @@ const UserNav = () => (
             </li>
             <li className="uk-nav-divider"></li>
             <li>
-              <NavLink to={ROUTES.SIGNOUT}>Sign out</NavLink>
+              <NavLink onClick={props.firebase.doSignOut}>Sign out</NavLink>
             </li>
           </ul>
         </div>
@@ -86,11 +86,16 @@ class Navigation extends Component {
       <AuthUserContext.Consumer>
         {authUser => (
           <nav className="bg-primary" uk-navbar="true">
+            {console.log(authUser)}
             <a href="/" className="uk-navbar-item uk-logo">
               Logo
             </a>
             <div className="uk-navbar-right">
-              {authUser ? <UserNav /> : <GuestNav />}
+              {authUser ? (
+                <UserNav firebase={this.props.firebase} />
+              ) : (
+                <GuestNav />
+              )}
             </div>
           </nav>
         )}
