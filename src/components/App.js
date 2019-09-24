@@ -1,7 +1,5 @@
 import React, { Component } from "react";
-import { compose } from "recompose";
 
-import Navigation from "./Navigation";
 import LandingPage from "../pages/Landing";
 import SignUpPage from "../pages/SignUp";
 import SignInPage from "../pages/SignIn";

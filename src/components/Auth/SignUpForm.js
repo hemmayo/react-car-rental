@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Link } from "react-router-dom";
+import { Link, withRouter } from "react-router-dom";
 import * as ROUTES from "../../constants/routes";
 import { withFirebase } from "../Firebase";
 
@@ -27,6 +27,9 @@ class SignUpForm extends Component {
           username,
           email
         });
+      })
+      .then(() => {
+        this.props.history.push(ROUTES.DASHBOARD);
       })
       .catch(e => this.setState({ error: e }));
   };
@@ -124,4 +127,4 @@ class SignUpForm extends Component {
   }
 }
 
-export default withFirebase(SignUpForm);
+export default withRouter(withFirebase(SignUpForm));
