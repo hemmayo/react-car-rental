@@ -5,7 +5,7 @@ import * as ROUTES from "../../constants/routes";
 import { AuthUserContext } from "../Session";
 import { withFirebase } from "../Firebase";
 
-const UserNav = props => (
+const UserNav = ({ user, firebase }) => (
   <>
     <ul className="uk-navbar-nav">
       <li>
@@ -28,9 +28,9 @@ const UserNav = props => (
           <img
             className="w-10 h-10 rounded-full mr-4"
             src="https://img.icons8.com/bubbles/50/000000/car.png"
-            alt="Jonathan Reinink"
+            alt={user.username}
           />
-          Emmanuel
+          {user.username}
         </NavLink>
         <div uk-dropdown="">
           <ul className="uk-nav uk-dropdown-nav">
@@ -49,7 +49,7 @@ const UserNav = props => (
             </li>
             <li className="uk-nav-divider"></li>
             <li>
-              <NavLink onClick={props.firebase.doSignOut}>Sign out</NavLink>
+              <NavLink onClick={firebase.doSignOut}>Sign out</NavLink>
             </li>
           </ul>
         </div>
@@ -81,24 +81,42 @@ const GuestNav = () => (
   </ul>
 );
 class Navigation extends Component {
+  state = { user: {}, loading: true };
+
+  componentDidMount() {
+    const { firebase } = this.props;
+
+    firebase.user(firebase.auth.currentUser.uid).on("value", snapshot => {
+      this.setState({ user: snapshot.val(), loading: false });
+    });
+  }
+
+  componentWillUnmount() {
+    const { firebase } = this.props;
+    firebase.user().off();
+  }
   render() {
+    const { firebase } = this.props;
+    const { user } = this.state;
+
     return (
       <AuthUserContext.Consumer>
-        {authUser => (
-          <nav className="bg-primary" uk-navbar="true">
-            {console.log(authUser)}
-            <a href="/" className="uk-navbar-item uk-logo">
-              Logo
-            </a>
-            <div className="uk-navbar-right">
-              {authUser ? (
-                <UserNav firebase={this.props.firebase} />
-              ) : (
-                <GuestNav />
-              )}
-            </div>
-          </nav>
-        )}
+        {authUser => {
+          return (
+            <nav className="bg-primary" uk-navbar="true">
+              <a href="/" className="uk-navbar-item uk-logo">
+                Logo
+              </a>
+              <div className="uk-navbar-right">
+                {authUser ? (
+                  <UserNav user={user} firebase={firebase} />
+                ) : (
+                  <GuestNav />
+                )}
+              </div>
+            </nav>
+          );
+        }}
       </AuthUserContext.Consumer>
     );
   }
