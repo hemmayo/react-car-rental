@@ -63,7 +63,7 @@ export default class Step2 extends Component {
               : "What's the drop-off location?"}
           </h1>
         </div>
-        <div className="my-2 uk-inline w-1/3">
+        <div className="my-2 uk-inline w-2/3 md:w-1/3">
           {hideInput ? (
             <>
               <div className="uk-inline mx-1">

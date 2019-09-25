@@ -107,6 +107,7 @@ export default class Step3 extends Component {
             startDate={pickupDate}
             endDate={dropoffDate}
             withFullScreenPortal={true}
+            orientation="vertical"
             onDatesChange={({ startDate, endDate }) => {
               const pickupDate = {
                 target: {

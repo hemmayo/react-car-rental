@@ -5,7 +5,7 @@ import Step3 from "./Step3";
 
 export default class BookRideBase extends Component {
   state = {
-    currentStep: 3,
+    currentStep: 1,
     pickup: "",
     dropoff: "",
     pickupDate: null,
