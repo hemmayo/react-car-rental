@@ -2,20 +2,22 @@ import React, { Component } from "react";
 import Step1 from "./Step1";
 import Step2 from "./Step2";
 import Step3 from "./Step3";
+import Step4 from "./Step4";
 
 export default class BookRideBase extends Component {
   state = {
-    currentStep: 1,
+    currentStep: 4,
     pickup: "",
     dropoff: "",
     pickupDate: null,
-    dropoffDate: null
+    dropoffDate: null,
+    age: ""
   };
 
   _next = () => {
     let currentStep = this.state.currentStep;
     // If the current step is 1 or 2, then add one on "next" button click
-    currentStep = currentStep >= 2 ? 3 : currentStep + 1;
+    currentStep = currentStep + 1 < 6 ? currentStep + 1 : currentStep;
     this.setState({
       currentStep: currentStep
     });
@@ -50,7 +52,7 @@ export default class BookRideBase extends Component {
   get nextButton() {
     let currentStep = this.state.currentStep;
     // If the current step is not 3, then render the "next" button
-    if (currentStep < 3) {
+    if (currentStep < 5) {
       return (
         <span
           onClick={this._next}
@@ -92,7 +94,6 @@ export default class BookRideBase extends Component {
           handleChange={this.handleChange}
           pickup={this.state.pickup}
           me={this.props.me}
-          next={this._next}
         />
         <Step2
           currentStep={this.state.currentStep}
@@ -100,14 +101,17 @@ export default class BookRideBase extends Component {
           editState={this.editState}
           dropoff={this.state.dropoff}
           pickup={this.state.pickup}
-          next={this._next}
         />
         <Step3
           currentStep={this.state.currentStep}
           handleChange={this.handleChange}
           pickupDate={this.state.pickupDate}
           dropoffDate={this.state.dropoffDate}
-          next={this._next}
+        />
+        <Step4
+          currentStep={this.state.currentStep}
+          editState={this.editState}
+          age={this.state.age}
         />
         <div class="uk-button-group my-4">
           {this.previousButton}
