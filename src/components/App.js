@@ -18,6 +18,7 @@ import { withAuthentication } from "./Session";
 
 class App extends Component {
   render() {
+    const { me } = this.props;
     return (
       <Router>
         <Route exact path={ROUTES.LANDING} component={LandingPage} />
@@ -25,12 +26,24 @@ class App extends Component {
         <Route path={ROUTES.SIGNIN} component={SignInPage} />
         <Route path={ROUTES.SIGNOUT} component={SignOutPage} />
         <Route path={ROUTES.PASSWORDFORGET} component={PasswordForgetPage} />
-        <Route path={ROUTES.DASHBOARD} component={DashboardPage} />
+        <Route
+          path={ROUTES.DASHBOARD}
+          render={props => <DashboardPage {...props} {...this.props} />}
+        />
         <Route path={ROUTES.ABOUT} component={AboutPage} />
         <Route path={ROUTES.CONTACT} component={ContactPage} />
-        <Route path={ROUTES.HIREDRIVER} component={HireDriverPage} />
-        <Route path={ROUTES.BOOKRIDE} component={BookRidePage} />
-        <Route path={ROUTES.SETTINGS} component={SettingsPage} />
+        <Route
+          path={ROUTES.HIREDRIVER}
+          render={props => <HireDriverPage {...props} {...this.props} />}
+        />
+        <Route
+          path={ROUTES.BOOKRIDE}
+          render={props => <BookRidePage {...props} {...this.props} />}
+        />
+        <Route
+          path={ROUTES.SETTINGS}
+          render={props => <SettingsPage {...props} {...this.props} />}
+        />
       </Router>
     );
   }

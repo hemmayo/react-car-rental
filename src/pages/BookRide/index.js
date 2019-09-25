@@ -2,45 +2,31 @@ import React, { Component } from "react";
 
 import Layout from "../../components/Layout";
 import { withAuthorization } from "../../components/Session";
+import BookRideBase from "./Form";
 
 class BookRide extends Component {
   state = {
-    step: 0,
-    formData: {}
+    me: {},
+    loading: true
   };
+
+  componentDidMount() {
+    this.props.firebase.user(this.props.me.uid).on("value", snapshot => {
+      this.setState({ me: snapshot.val(), loading: false });
+    });
+  }
+
+  componentWillUnmount() {
+    this.props.firebase.user().off();
+  }
+
   render() {
+    const { me, loading } = this.state;
+    console.log(this.state.me);
+
     return (
       <Layout>
-        <div className="flex flex-col text-center items-center">
-          <img
-            className="my-2"
-            src="https://img.icons8.com/cotton/128/000000/pickup-point.png"
-            width={120}
-            height={120}
-            alt="Pickup location"
-          />
-          <div className="my-4">
-            <h1 className="text-3xl font-bold mb-2">Hi, Emmanuel!</h1>
-            <h1 className="text-xl">What's your pick-up location?</h1>
-          </div>
-          <div className="my-2">
-            <form>
-              <div class="uk-margin">
-                <div class="uk-inline">
-                  <a
-                    class="uk-form-icon uk-form-icon-flip"
-                    href="#"
-                    uk-icon="icon: arrow-right"
-                  ></a>
-                  <input
-                    class="uk-input uk-form-width-large uk-form-large rounded"
-                    type="text"
-                  />
-                </div>
-              </div>
-            </form>
-          </div>
-        </div>
+        <div className="w-full">{!loading && <BookRideBase me={me} />}</div>
       </Layout>
     );
   }

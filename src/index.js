@@ -8,6 +8,7 @@ import Icons from "uikit/dist/js/uikit-icons";
 import "uikit/dist/css/uikit.min.css";
 import "./styles/tailwind.css";
 import "./styles/override.css";
+import "react-dates/initialize";
 
 import * as serviceWorker from "./serviceWorker";
 

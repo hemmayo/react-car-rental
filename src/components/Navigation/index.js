@@ -85,10 +85,10 @@ class Navigation extends Component {
 
   componentDidMount() {
     const { firebase } = this.props;
-
-    firebase.user(firebase.auth.currentUser.uid).on("value", snapshot => {
-      this.setState({ user: snapshot.val(), loading: false });
-    });
+    firebase.auth.currentUser &&
+      firebase.user(firebase.auth.currentUser.uid).on("value", snapshot => {
+        this.setState(st => ({ user: snapshot.val(), loading: false }));
+      });
   }
 
   componentWillUnmount() {
@@ -107,7 +107,7 @@ class Navigation extends Component {
               <a href="/" className="uk-navbar-item uk-logo">
                 Logo
               </a>
-              <div className="uk-navbar-right">
+              <div className="uk-navbar-right uk-visible@s">
                 {authUser ? (
                   <UserNav user={user} firebase={firebase} />
                 ) : (
