@@ -10,7 +10,9 @@ class Dashboard extends Component {
     return (
       <Layout>
         <div className="font-sans text-center my-4">
-          <h1 className="text-3xl font-bold my-2">Hi, Emmanuel!</h1>
+          <h1 className="text-3xl font-bold my-2">
+            Hi, {this.props.me.username}!
+          </h1>
           <h1 className="text-xl">What would you like to do today?</h1>
         </div>
         <div>

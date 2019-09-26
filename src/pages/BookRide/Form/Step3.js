@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { DateRangePicker } from "react-dates";
+import moment from "moment";
 
 import "react-dates/lib/css/_datepicker.css";
 
@@ -18,10 +19,10 @@ export default class Step3 extends Component {
     return (
       <React.Fragment>
         <svg className="my-2 w-20 md:w-24" viewBox="0 0 101 94">
-          <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+          <g stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
             <g
               transform="translate(-670.000000, -241.000000)"
-              fill-rule="nonzero"
+              fillRule="nonzero"
             >
               <g transform="translate(670.500000, 241.000000)">
                 <path
@@ -104,25 +105,29 @@ export default class Step3 extends Component {
         </div>
         <div className="my-2 uk-inline md:w-1/3">
           <DateRangePicker
-            startDate={pickupDate}
-            endDate={dropoffDate}
+            startDate={moment(pickupDate)}
+            endDate={moment(dropoffDate)}
             withFullScreenPortal={true}
             orientation="vertical"
             onDatesChange={({ startDate, endDate }) => {
-              const pickupDate = {
-                target: {
-                  name: "pickupDate",
-                  value: startDate
+              const data = [
+                {
+                  target: {
+                    name: "pickupDate",
+                    value: moment(startDate).format()
+                  }
+                },
+                {
+                  target: {
+                    name: "dropoffDate",
+                    value: moment(endDate).format()
+                  }
                 }
-              };
-              const dropoffDate = {
-                target: {
-                  name: "dropoffDate",
-                  value: endDate
-                }
-              };
-              startDate && handleChange(pickupDate);
-              handleChange(dropoffDate);
+              ];
+
+              data.forEach(d => {
+                startDate && handleChange(d);
+              });
             }} // PropTypes.func.isRequired,
             focusedInput={this.state.focusedInput} // PropTypes.oneOf([START_DATE, END_DATE]) or null,
             onFocusChange={focusedInput => this.setState({ focusedInput })} // PropTypes.func.isRequired,

@@ -18,7 +18,6 @@ import { withAuthentication } from "./Session";
 
 class App extends Component {
   render() {
-    const { me } = this.props;
     return (
       <Router>
         <Route exact path={ROUTES.LANDING} component={LandingPage} />

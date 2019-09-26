@@ -1,0 +1,75 @@
+[debug] [2019-09-25T19:48:16.655Z] ----------------------------------------------------------------------
+[debug] [2019-09-25T19:48:16.660Z] Command:       /usr/local/bin/node /usr/local/bin/firebase deploy
+[debug] [2019-09-25T19:48:16.660Z] CLI Version:   7.2.4
+[debug] [2019-09-25T19:48:16.660Z] Platform:      darwin
+[debug] [2019-09-25T19:48:16.660Z] Node Version:  v12.6.0
+[debug] [2019-09-25T19:48:16.668Z] Time:          Wed Sep 25 2019 20:48:16 GMT+0100 (West Africa Standard Time)
+[debug] [2019-09-25T19:48:16.668Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2019-09-25T19:48:16.685Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2019-09-25T19:48:16.685Z] > authorizing via signed-in user
+[debug] [2019-09-25T19:48:16.685Z] [iam] checking project car-rental-428b2 for permissions ["cloudfunctions.functions.create","cloudfunctions.functions.delete","cloudfunctions.functions.get","cloudfunctions.functions.list","cloudfunctions.functions.update","cloudfunctions.operations.get","firebase.projects.get","firebasedatabase.instances.update","firebasehosting.sites.update"]
+[debug] [2019-09-25T19:48:16.687Z] > refreshing access token with scopes: ["email","https://www.googleapis.com/auth/cloud-platform","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","openid"]
+[debug] [2019-09-25T19:48:16.687Z] >>> HTTP REQUEST POST https://www.googleapis.com/oauth2/v3/token  
+ <request body omitted>
+[debug] [2019-09-25T19:48:18.396Z] <<< HTTP RESPONSE 200
+[debug] [2019-09-25T19:48:18.435Z] >>> HTTP REQUEST POST https://cloudresourcemanager.googleapis.com/v1/projects/car-rental-428b2:testIamPermissions  
+
+[debug] [2019-09-25T19:48:27.639Z] <<< HTTP RESPONSE 200
+[debug] [2019-09-25T19:48:27.641Z] >>> HTTP REQUEST GET https://firebase.googleapis.com/v1beta1/projects/car-rental-428b2  
+ 
+[debug] [2019-09-25T19:48:28.869Z] <<< HTTP RESPONSE 200
+[info] 
+[info] === Deploying to 'car-rental-428b2'...
+[info] 
+[info] i  deploying database, functions, hosting
+[info] Running command: npm --prefix "$RESOURCE_DIR" run lint
+[info] ✔  functions: Finished running predeploy script.
+[info] i  database: checking rules syntax...
+[debug] [2019-09-25T19:48:34.499Z] >>> HTTP REQUEST PUT https://car-rental-428b2.firebaseio.com/.settings/rules.json?dryRun=true  
+ {
+  /* Visit https://firebase.google.com/docs/database/security to learn more about security rules. */
+  "rules": {
+    ".read": true,
+    ".write": true
+  }
+}
+
+[debug] [2019-09-25T19:48:36.388Z] <<< HTTP RESPONSE 200
+[info] ✔  database: rules syntax for database car-rental-428b2 is valid
+[debug] [2019-09-25T19:48:36.391Z] > [functions] package.json contents: {
+  "name": "functions",
+  "description": "Cloud Functions for Firebase",
+  "scripts": {
+    "lint": "eslint .",
+    "serve": "firebase serve --only functions",
+    "shell": "firebase functions:shell",
+    "start": "npm run shell",
+    "deploy": "firebase deploy --only functions",
+    "logs": "firebase functions:log"
+  },
+  "engines": {
+    "node": "8"
+  },
+  "dependencies": {
+    "firebase-admin": "^8.0.0",
+    "firebase-functions": "^3.1.0"
+  },
+  "devDependencies": {
+    "eslint": "^5.12.0",
+    "eslint-plugin-promise": "^4.0.1",
+    "firebase-functions-test": "^0.1.6"
+  },
+  "private": true
+}
+[info] i  functions: ensuring necessary APIs are enabled...
+[debug] [2019-09-25T19:48:36.393Z] >>> HTTP REQUEST GET https://serviceusage.googleapis.com/v1/projects/car-rental-428b2/services/cloudfunctions.googleapis.com  
+ 
+[debug] [2019-09-25T19:48:36.394Z] >>> HTTP REQUEST GET https://serviceusage.googleapis.com/v1/projects/car-rental-428b2/services/runtimeconfig.googleapis.com  
+ 
+[debug] [2019-09-25T19:48:40.641Z] <<< HTTP RESPONSE 200
+[info] ✔  functions: all necessary APIs are enabled
+[debug] [2019-09-25T19:49:53.132Z] Error: connect ETIMEDOUT 216.58.223.202:443
+    at TCPConnectWrap.afterConnect [as oncomplete] (net.js:1056:14)
+[error] 
+[error] Error: Server Error. connect ETIMEDOUT 216.58.223.202:443

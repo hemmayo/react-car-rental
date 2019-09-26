@@ -1,4 +1,7 @@
 import React, { Component } from "react";
+import SimpleStorage from "react-simple-storage";
+import moment from "moment";
+
 import Step1 from "./Step1";
 import Step2 from "./Step2";
 import Step3 from "./Step3";
@@ -6,11 +9,11 @@ import Step4 from "./Step4";
 
 export default class BookRideBase extends Component {
   state = {
-    currentStep: 4,
+    currentStep: 1,
     pickup: "",
     dropoff: "",
-    pickupDate: null,
-    dropoffDate: null,
+    pickupDate: {},
+    dropoffDate: {},
     age: ""
   };
 
@@ -89,6 +92,7 @@ export default class BookRideBase extends Component {
         className="relative flex flex-col text-center items-center w-full"
         onSubmit={this.handleSubmit}
       >
+        <SimpleStorage parent={this} />
         <Step1
           currentStep={this.state.currentStep}
           handleChange={this.handleChange}
