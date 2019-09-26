@@ -9,7 +9,7 @@ export default class Step3 extends Component {
     focusedInput: ""
   };
   render() {
-    const { pickupDate, dropoffDate, currentStep, handleChange } = this.props;
+    const { pickupDate, dropoffDate, currentStep, onDatesChange } = this.props;
 
     if (currentStep !== 3) {
       // Prop: The current step
@@ -109,28 +109,9 @@ export default class Step3 extends Component {
             endDate={moment(dropoffDate)}
             withFullScreenPortal={true}
             orientation="vertical"
-            onDatesChange={({ startDate, endDate }) => {
-              const data = [
-                {
-                  target: {
-                    name: "pickupDate",
-                    value: moment(startDate).format()
-                  }
-                },
-                {
-                  target: {
-                    name: "dropoffDate",
-                    value: moment(endDate).format()
-                  }
-                }
-              ];
-
-              data.forEach(d => {
-                startDate && handleChange(d);
-              });
-            }} // PropTypes.func.isRequired,
-            focusedInput={this.state.focusedInput} // PropTypes.oneOf([START_DATE, END_DATE]) or null,
-            onFocusChange={focusedInput => this.setState({ focusedInput })} // PropTypes.func.isRequired,
+            onDatesChange={onDatesChange}
+            focusedInput={this.state.focusedInput}
+            onFocusChange={focusedInput => this.setState({ focusedInput })}
           />
         </div>
       </React.Fragment>

@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import SimpleStorage from "react-simple-storage";
 import moment from "moment";
 
+import MiniBar from "../MiniBar";
 import Step1 from "./Step1";
 import Step2 from "./Step2";
 import Step3 from "./Step3";
@@ -9,7 +10,7 @@ import Step4 from "./Step4";
 
 export default class BookRideBase extends Component {
   state = {
-    currentStep: 1,
+    currentStep: 5,
     pickup: "",
     dropoff: "",
     pickupDate: {},
@@ -86,42 +87,52 @@ export default class BookRideBase extends Component {
     this.setState({ [name]: value });
   };
 
+  onDatesChange = ({ startDate, endDate }) => {
+    startDate &&
+      this.setState({
+        pickupDate: moment(startDate).format()
+      });
+    endDate && this.setState({ dropoffDate: moment(endDate).format() });
+  };
   render() {
     return (
-      <form
-        className="relative flex flex-col text-center items-center w-full"
-        onSubmit={this.handleSubmit}
-      >
-        <SimpleStorage parent={this} />
-        <Step1
-          currentStep={this.state.currentStep}
-          handleChange={this.handleChange}
-          pickup={this.state.pickup}
-          me={this.props.me}
-        />
-        <Step2
-          currentStep={this.state.currentStep}
-          handleChange={this.handleChange}
-          editState={this.editState}
-          dropoff={this.state.dropoff}
-          pickup={this.state.pickup}
-        />
-        <Step3
-          currentStep={this.state.currentStep}
-          handleChange={this.handleChange}
-          pickupDate={this.state.pickupDate}
-          dropoffDate={this.state.dropoffDate}
-        />
-        <Step4
-          currentStep={this.state.currentStep}
-          editState={this.editState}
-          age={this.state.age}
-        />
-        <div class="uk-button-group my-4">
-          {this.previousButton}
-          {this.nextButton}
-        </div>
-      </form>
+      <React.Fragment>
+        <MiniBar type="full" {...this.state} {...this} />
+        <form
+          className="relative flex flex-col text-center items-center w-full"
+          onSubmit={this.handleSubmit}
+        >
+          <SimpleStorage parent={this} />
+          <Step1
+            currentStep={this.state.currentStep}
+            handleChange={this.handleChange}
+            pickup={this.state.pickup}
+            me={this.props.me}
+          />
+          <Step2
+            currentStep={this.state.currentStep}
+            handleChange={this.handleChange}
+            editState={this.editState}
+            dropoff={this.state.dropoff}
+            pickup={this.state.pickup}
+          />
+          <Step3
+            currentStep={this.state.currentStep}
+            onDatesChange={this.onDatesChange}
+            pickupDate={this.state.pickupDate}
+            dropoffDate={this.state.dropoffDate}
+          />
+          <Step4
+            currentStep={this.state.currentStep}
+            editState={this.editState}
+            age={this.state.age}
+          />
+          <div class="uk-button-group my-4">
+            {this.previousButton}
+            {this.nextButton}
+          </div>
+        </form>
+      </React.Fragment>
     );
   }
 }

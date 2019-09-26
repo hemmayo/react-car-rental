@@ -3,6 +3,7 @@ import React, { Component } from "react";
 import Layout from "../../components/Layout";
 import { withAuthorization } from "../../components/Session";
 import BookRideBase from "./Form";
+import MiniBar from "./MiniBar";
 
 class BookRide extends Component {
   state = {};
