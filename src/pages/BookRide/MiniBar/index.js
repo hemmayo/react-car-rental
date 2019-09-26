@@ -8,40 +8,34 @@ export default class MiniBar extends Component {
   };
 
   render() {
-    const {
-      pickup,
-      dropoff,
-      pickupDate,
-      dropoffDate,
-      handleChange,
-      onDatesChange
-    } = this.props;
+    const { type, pickup, dropoff, pickupDate, dropoffDate } = this.props;
 
-    return (
-      <div className="w-full flex uk-card uk-card-default p-4 rounded uk-margin">
-        <div className="mr-2">
+    const margin = type === "mini" ? "mb-2" : "mr-2";
+
+    const fields = {
+      pickup: (
+        <div className={margin}>
           <label className="text-sm">Pick-up location</label>
           <input
             className="uk-input uk-form rounded mt-1 text-sm"
             type="text"
             value={pickup}
-            name="pickup"
-            placeholder="Type a location"
-            onChange={handleChange}
+            name="dropoff"
           />
         </div>
-        <div className="mr-2">
+      ),
+      dropoff: (
+        <div className={margin}>
           <label className="text-sm">Drop-off location</label>
           <input
             className="uk-input uk-form rounded mt-1 text-sm"
             type="text"
             value={dropoff}
-            name="dropoff"
-            placeholder="Type a location"
-            onChange={handleChange}
           />
         </div>
-        <div className="mr-2">
+      ),
+      pickupDate: (
+        <div className={margin}>
           <label className="text-sm">Pick-up date</label>
           <input
             className="uk-input uk-form rounded mt-1 text-sm"
@@ -50,7 +44,9 @@ export default class MiniBar extends Component {
             disabled={true}
           />
         </div>
-        <div className="mr-2">
+      ),
+      dropoffDate: (
+        <div className={margin}>
           <label className="text-sm">Drop-off date</label>
           <input
             className="uk-input uk-form rounded mt-1 text-sm"
@@ -59,10 +55,34 @@ export default class MiniBar extends Component {
             disabled={true}
           />
         </div>
-        <div className="flex items-end">
-          <button className="uk-button uk-button-default rounded">Edit</button>
+      )
+    };
+
+    return (
+      (pickup.length !== 0 || dropoff.length !== 0) && (
+        <div
+          className={`${
+            type === "mini"
+              ? "w-full md:w-1/4 flex-col absolute top-0 right-0 m-2"
+              : ""
+          } flex uk-card uk-card-default p-4 rounded uk-margin`}
+        >
+          {pickup && fields.pickup}
+          {dropoff && fields.dropoff}
+          {pickupDate.length > 0 && pickup && fields.pickupDate}
+          {dropoffDate.length > 0 && dropoff && fields.dropoffDate}
+
+          <div className="flex items-end">
+            <button
+              className={`uk-button uk-button-default rounded ${
+                type === "mini" ? "hidden" : ""
+              }`}
+            >
+              Edit
+            </button>
+          </div>
         </div>
-      </div>
+      )
     );
   }
 }

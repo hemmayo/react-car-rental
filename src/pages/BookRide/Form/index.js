@@ -7,24 +7,62 @@ import Step1 from "./Step1";
 import Step2 from "./Step2";
 import Step3 from "./Step3";
 import Step4 from "./Step4";
+import Alert from "../../../components/Alert";
+
+const INITIAL_STATE = {
+  currentStep: 1,
+  pickup: "",
+  dropoff: "",
+  pickupDate: {},
+  dropoffDate: {},
+  age: "",
+  error: null
+};
 
 export default class BookRideBase extends Component {
   state = {
-    currentStep: 5,
-    pickup: "",
-    dropoff: "",
-    pickupDate: {},
-    dropoffDate: {},
-    age: ""
+    ...INITIAL_STATE
   };
 
   _next = () => {
-    let currentStep = this.state.currentStep;
-    // If the current step is 1 or 2, then add one on "next" button click
-    currentStep = currentStep + 1 < 6 ? currentStep + 1 : currentStep;
-    this.setState({
-      currentStep: currentStep
-    });
+    const {
+      pickup,
+      dropoff,
+      pickupDate,
+      dropoffDate,
+      currentStep
+    } = this.state;
+
+    let canMove = false;
+
+    switch (currentStep) {
+      case 1:
+        canMove = pickup.length > 0;
+        break;
+      case 2:
+        canMove = dropoff.length > 0;
+        break;
+      case 3:
+        canMove = pickupDate.length > 0;
+        break;
+      case 4:
+        canMove = dropoffDate.length > 0;
+        break;
+    }
+    canMove
+      ? this.setState(st => ({
+          currentStep:
+            st.currentStep + 1 < 5 ? st.currentStep + 1 : st.currentStep
+        }))
+      : (() => {
+          this.setState({
+            error: {
+              type: "danger",
+              message: "You can't proceed until you complete the form!"
+            }
+          });
+          setTimeout(() => this.setState({ error: null }), 2500);
+        })();
   };
 
   _prev = () => {
@@ -97,7 +135,7 @@ export default class BookRideBase extends Component {
   render() {
     return (
       <React.Fragment>
-        <MiniBar type="full" {...this.state} {...this} />
+        <MiniBar type="mini" {...this.state} />
         <form
           className="relative flex flex-col text-center items-center w-full"
           onSubmit={this.handleSubmit}
@@ -127,6 +165,9 @@ export default class BookRideBase extends Component {
             editState={this.editState}
             age={this.state.age}
           />
+
+          {this.state.error && <Alert {...this.state.error} />}
+
           <div class="uk-button-group my-4">
             {this.previousButton}
             {this.nextButton}
