@@ -7,6 +7,7 @@ import Step1 from "./Step1";
 import Step2 from "./Step2";
 import Step3 from "./Step3";
 import Step4 from "./Step4";
+import Step5 from "./Step5";
 import Alert from "../../../components/Alert";
 
 const INITIAL_STATE = {
@@ -16,6 +17,8 @@ const INITIAL_STATE = {
   pickupDate: {},
   dropoffDate: {},
   age: "",
+  carId: "",
+  driverId: "",
   error: null
 };
 
@@ -30,35 +33,49 @@ export default class BookRideBase extends Component {
       dropoff,
       pickupDate,
       dropoffDate,
-      currentStep
+      currentStep,
+      carId
     } = this.state;
 
     let canMove = false;
+    let errorMessage;
 
     switch (currentStep) {
       case 1:
         canMove = pickup.length > 0;
+        errorMessage = "You must have a pickup location!";
         break;
       case 2:
         canMove = dropoff.length > 0;
+        errorMessage = "Tell us where you would like to drop-off!";
         break;
       case 3:
         canMove = pickupDate.length > 0;
+        errorMessage = "We'd love to know when you'll pick-up the car.";
         break;
       case 4:
         canMove = dropoffDate.length > 0;
+        errorMessage = "When do you want to drop-off the car?";
         break;
+      case 5:
+        canMove = carId.length > 0;
+        errorMessage = "C'mon man! Pick a car!";
+        break;
+      default:
+        canMove = currentStep > 4 && currentStep <= 6;
     }
+
     canMove
       ? this.setState(st => ({
           currentStep:
-            st.currentStep + 1 < 5 ? st.currentStep + 1 : st.currentStep
+            st.currentStep + 1 <= 6 ? st.currentStep + 1 : st.currentStep
         }))
       : (() => {
           this.setState({
             error: {
               type: "danger",
-              message: "You can't proceed until you complete the form!"
+              message:
+                errorMessage || "You can't proceed until you complete the form!"
             }
           });
           setTimeout(() => this.setState({ error: null }), 2500);
@@ -93,8 +110,8 @@ export default class BookRideBase extends Component {
 
   get nextButton() {
     let currentStep = this.state.currentStep;
-    // If the current step is not 3, then render the "next" button
-    if (currentStep < 5) {
+    // If the current step is less than 7, then render the "next" button
+    if (currentStep < 7) {
       return (
         <span
           onClick={this._next}
@@ -135,7 +152,10 @@ export default class BookRideBase extends Component {
   render() {
     return (
       <React.Fragment>
-        <MiniBar type="mini" {...this.state} />
+        <MiniBar
+          type={this.state.currentStep > 4 ? "full" : "mini"}
+          {...this.state}
+        />
         <form
           className="relative flex flex-col text-center items-center w-full"
           onSubmit={this.handleSubmit}
@@ -164,6 +184,11 @@ export default class BookRideBase extends Component {
             currentStep={this.state.currentStep}
             editState={this.editState}
             age={this.state.age}
+          />
+
+          <Step5
+            currentStep={this.state.currentStep}
+            editState={this.editState}
           />
 
           {this.state.error && <Alert {...this.state.error} />}

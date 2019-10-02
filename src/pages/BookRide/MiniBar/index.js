@@ -63,15 +63,14 @@ export default class MiniBar extends Component {
         <div
           className={`${
             type === "mini"
-              ? "w-full md:w-1/4 flex-col absolute top-0 right-0 m-2"
-              : ""
-          } flex uk-card uk-card-default p-4 rounded uk-margin`}
+              ? "w-full md:w-1/4 absolute top-0 right-0 m-2"
+              : "md:flex-row"
+          } flex flex-col uk-card uk-card-default p-4 rounded uk-margin`}
         >
           {pickup && fields.pickup}
           {dropoff && fields.dropoff}
           {pickupDate.length > 0 && pickup && fields.pickupDate}
           {dropoffDate.length > 0 && dropoff && fields.dropoffDate}
-
           <div className="flex items-end">
             <button
               className={`uk-button uk-button-default rounded ${

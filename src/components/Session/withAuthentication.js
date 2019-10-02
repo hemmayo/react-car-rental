@@ -2,6 +2,7 @@ import React from "react";
 
 import AuthUserContext from "./context";
 import { withFirebase } from "../Firebase";
+import Loading from "../Loading";
 
 const withAuthentication = Component => {
   class WithAuthentication extends React.Component {
@@ -35,7 +36,11 @@ const withAuthentication = Component => {
       const { loading } = this.state;
       return (
         <AuthUserContext.Provider value={this.state.authUser}>
-          {!loading && <Component me={this.state.me} {...this.props} />}
+          {!loading ? (
+            <Component me={this.state.me} {...this.props} />
+          ) : (
+            <Loading />
+          )}
         </AuthUserContext.Provider>
       );
     }

@@ -97,7 +97,7 @@ class Navigation extends Component {
   }
   render() {
     const { firebase } = this.props;
-    const { user } = this.state;
+    const { user, loading } = this.state;
 
     return (
       <AuthUserContext.Consumer>
@@ -108,7 +108,9 @@ class Navigation extends Component {
                 Logo
               </a>
               <div className="uk-navbar-right uk-visible@s">
-                {authUser ? (
+                {loading ? (
+                  <div uk-spinner=""></div>
+                ) : authUser ? (
                   <UserNav user={user} firebase={firebase} />
                 ) : (
                   <GuestNav />
