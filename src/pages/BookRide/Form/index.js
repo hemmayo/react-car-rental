@@ -8,6 +8,7 @@ import Step2 from "./Step2";
 import Step3 from "./Step3";
 import Step4 from "./Step4";
 import Step5 from "./Step5";
+import Step6 from "./Step6";
 import Alert from "../../../components/Alert";
 
 const INITIAL_STATE = {
@@ -34,7 +35,8 @@ export default class BookRideBase extends Component {
       pickupDate,
       dropoffDate,
       currentStep,
-      carId
+      carId,
+      driverId
     } = this.state;
 
     let canMove = false;
@@ -62,13 +64,13 @@ export default class BookRideBase extends Component {
         errorMessage = "C'mon man! Pick a car!";
         break;
       default:
-        canMove = currentStep > 4 && currentStep <= 6;
+        canMove = currentStep > 4 && currentStep <= 7;
     }
 
     canMove
       ? this.setState(st => ({
           currentStep:
-            st.currentStep + 1 <= 6 ? st.currentStep + 1 : st.currentStep
+            st.currentStep + 1 <= 7 ? st.currentStep + 1 : st.currentStep
         }))
       : (() => {
           this.setState({
@@ -111,7 +113,7 @@ export default class BookRideBase extends Component {
   get nextButton() {
     let currentStep = this.state.currentStep;
     // If the current step is less than 7, then render the "next" button
-    if (currentStep < 7) {
+    if (currentStep <= 7) {
       return (
         <span
           onClick={this._next}
@@ -129,7 +131,7 @@ export default class BookRideBase extends Component {
     evt.preventDefault();
     const { currentStep } = this.state;
     const newStep = currentStep + 1;
-    if (newStep < 6) {
+    if (newStep <= 7) {
       this.setState({ currentStep: newStep });
     }
   };
@@ -189,6 +191,12 @@ export default class BookRideBase extends Component {
           <Step5
             currentStep={this.state.currentStep}
             editState={this.editState}
+            selectedCar={this.state.carId}
+          />
+          <Step6
+            currentStep={this.state.currentStep}
+            editState={this.editState}
+            selectedDriver={this.state.driverId}
           />
 
           {this.state.error && <Alert {...this.state.error} />}

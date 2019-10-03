@@ -16,7 +16,12 @@ export default class Car extends Component {
     const carName = manufacturer + ` ` + model + " " + year;
 
     return (
-      <div className="flex flex-col justify-between uk-card uk-card-default p-4 text-sm text-primary shadow rounded">
+      <a
+        href={`https://www.google.com/search?q=${carName}`}
+        target="_blank"
+        className="flex flex-col justify-between uk-card uk-card-default p-4 text-sm text-primary hover:text-primary hover:no-underline hover:shadow-lg shadow rounded cursor-pointer"
+        title="Click to know more"
+      >
         <div className="flex justify-between">
           <div className="flex flex-col items-start w-2/3">
             <h3 className="text-base font-bold">{carName}</h3>
@@ -41,7 +46,10 @@ export default class Car extends Component {
             <span className="font-semibold text-primary">N{rate}</span>/hr
           </span>
           <button
-            onClick={() => selectCar(uid)}
+            onClick={e => {
+              e.preventDefault();
+              !selected ? selectCar(uid) : selectCar("");
+            }}
             class={`uk-button rounded ${
               selected
                 ? "bg-primary text-gray-100"
@@ -58,7 +66,7 @@ export default class Car extends Component {
             )}
           </button>
         </div>
-      </div>
+      </a>
     );
   }
 }

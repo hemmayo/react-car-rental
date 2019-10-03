@@ -17,6 +17,7 @@ class Step5 extends Component {
           }));
           this.setState({
             cars: carsList,
+            selectedCar: this.props.selectedCar,
             loading: false
           });
         } else {
@@ -32,18 +33,18 @@ class Step5 extends Component {
 
   render() {
     const { currentStep } = this.props;
-    const { cars, selectedCar } = this.state;
+    const { cars, selectedCar, loading } = this.state;
 
     if (currentStep !== 5) {
       // Prop: The current step
       return null;
     }
 
-    return !this.state.loading ? (
+    return !loading ? (
       <div className="self-start text-left">
         <h1 className="text-xl font-semibold text-primary my-8">Select Car:</h1>
         <div className="grid grid-col-2 grid-gap md:grid-col-4">
-          {this.state.cars.map(car => (
+          {cars.map(car => (
             <Car
               key={car.uid}
               {...car}
