@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import SimpleStorage from "react-simple-storage";
 import moment from "moment";
+import { withFirebase } from "../../../components/Firebase";
+import { withRouter } from "react-router-dom";
 
 import MiniBar from "../MiniBar";
 import Step1 from "./Step1";
@@ -23,9 +25,13 @@ const INITIAL_STATE = {
   error: null
 };
 
-export default class BookRideBase extends Component {
+class BookRideBase extends Component {
   state = {
     ...INITIAL_STATE
+  };
+
+  static defaultProps = {
+    numberOfSteps: 6
   };
 
   _next = () => {
@@ -61,21 +67,23 @@ export default class BookRideBase extends Component {
         break;
       case 5:
         canMove = carId.length > 0;
-        errorMessage = "C'mon man! Pick a car!";
+        errorMessage = "C'mon man! Choose a car!";
         break;
       default:
-        canMove = currentStep > 4 && currentStep <= 7;
+        canMove = currentStep > 4 && currentStep <= this.props.numberOfSteps;
     }
 
     canMove
       ? this.setState(st => ({
           currentStep:
-            st.currentStep + 1 <= 7 ? st.currentStep + 1 : st.currentStep
+            st.currentStep + 1 <= this.props.numberOfSteps
+              ? st.currentStep + 1
+              : st.currentStep
         }))
       : (() => {
           this.setState({
             error: {
-              type: "danger",
+              type: "warning",
               message:
                 errorMessage || "You can't proceed until you complete the form!"
             }
@@ -113,7 +121,7 @@ export default class BookRideBase extends Component {
   get nextButton() {
     let currentStep = this.state.currentStep;
     // If the current step is less than 7, then render the "next" button
-    if (currentStep <= 7) {
+    if (currentStep < this.props.numberOfSteps) {
       return (
         <span
           onClick={this._next}
@@ -122,17 +130,81 @@ export default class BookRideBase extends Component {
           title="Next"
         ></span>
       );
+    } else {
+      return (
+        <span
+          onClick={this.handleSubmit}
+          className="rounded-full uk-button uk-button-default p-2 cursor-pointer"
+          uk-icon="icon: check; ratio: 1.5"
+          title="Finish"
+        ></span>
+      );
     }
-    // ...else render nothing
-    return null;
   }
 
   handleSubmit = evt => {
     evt.preventDefault();
-    const { currentStep } = this.state;
-    const newStep = currentStep + 1;
-    if (newStep <= 7) {
-      this.setState({ currentStep: newStep });
+    const {
+      pickup,
+      dropoff,
+      pickupDate,
+      dropoffDate,
+      currentStep,
+      carId,
+      driverId,
+      error,
+      age
+    } = this.state;
+
+    if (currentStep < this.props.numberOfSteps) {
+      this._next();
+    } else {
+      if (
+        pickup &&
+        dropoff &&
+        carId &&
+        error === null &&
+        age &&
+        pickupDate.length > 0 &&
+        dropoffDate.length > 0 &&
+        currentStep === this.props.numberOfSteps
+      ) {
+        this.props.firebase
+          .orders()
+          .push({
+            pickup,
+            dropoff,
+            age,
+            pickupDate,
+            dropoffDate,
+            carId,
+            driverId,
+            status: "not_paid"
+          })
+          .then(() => {
+            this.setState({ ...INITIAL_STATE });
+            this.props.history.push("/bookings");
+          })
+          .catch(err => {
+            this.setState({
+              currentStep: 1,
+              error: {
+                type: "warning",
+                message: err.message
+              }
+            });
+            setTimeout(() => this.setState({ error: null }), 2500);
+          });
+      } else {
+        this.setState({
+          currentStep: 1,
+          error: {
+            type: "warning",
+            message: "Please make sure that you completed the form."
+          }
+        });
+        setTimeout(() => this.setState({ error: null }), 2500);
+      }
     }
   };
 
@@ -210,3 +282,5 @@ export default class BookRideBase extends Component {
     );
   }
 }
+
+export default withRouter(withFirebase(BookRideBase));

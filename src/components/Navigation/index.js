@@ -19,7 +19,7 @@ const UserNav = ({ user, firebase }) => (
         </NavLink>
       </li>
       <li>
-        <NavLink to={ROUTES.ABOUT}>History</NavLink>
+        <NavLink to={ROUTES.ORDERS}>Orders</NavLink>
       </li>
     </ul>
     <ul className="uk-navbar-nav">
@@ -35,17 +35,17 @@ const UserNav = ({ user, firebase }) => (
         <div uk-dropdown="">
           <ul className="uk-nav uk-dropdown-nav">
             <li>
-              <NavLink to={ROUTES.DASHBOARD}>View Orders</NavLink>
+              <NavLink to={ROUTES.ORDERS}>View Orders</NavLink>
             </li>
             <li>
-              <NavLink to={ROUTES.DASHBOARD}>Update Profile</NavLink>
+              <NavLink to={ROUTES.PROFILE}>Update Profile</NavLink>
             </li>
             <li className="uk-nav-header">More</li>
             <li>
               <NavLink to={ROUTES.SETTINGS}>Settings</NavLink>
             </li>
             <li>
-              <NavLink to={ROUTES.DASHBOARD}>Change Password</NavLink>
+              <NavLink to={ROUTES.PASSWORDCHANGE}>Change Password</NavLink>
             </li>
             <li className="uk-nav-divider"></li>
             <li>
@@ -105,7 +105,7 @@ class Navigation extends Component {
           return (
             <nav className="bg-primary" uk-navbar="true">
               <a href="/" className="uk-navbar-item uk-logo">
-                Logo
+                Car Rental
               </a>
               <div className="uk-navbar-right uk-visible@s">
                 {loading ? (

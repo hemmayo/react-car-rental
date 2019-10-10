@@ -42,22 +42,29 @@ class Step6 extends Component {
 
     return !loading ? (
       <div className="self-start text-left">
-        <h1 className="text-xl font-semibold text-primary mt-8">
+        <h1 className="text-xl font-semibold text-primary mt-8 mb-2">
           Select Driver
         </h1>
-        <p className="mb-8">
+        <p className="mb-8 text-gray-700">
           If you don't need a driver, simply skip this step.
         </p>
-        <div className="grid grid-col-2 grid-gap md:grid-col-4">
-          {drivers.map(driver => (
-            <Driver
-              key={driver.uid}
-              {...driver}
-              selectDriver={this.selectDriver}
-              selected={selectedDriver === driver.uid}
-            />
-          ))}
-        </div>
+        {drivers.length > 0 ? (
+          <div className="grid grid-col-2 grid-gap md:grid-col-4">
+            {drivers.map(driver => (
+              <Driver
+                key={driver.uid}
+                {...driver}
+                selectDriver={this.selectDriver}
+                selected={selectedDriver === driver.uid}
+              />
+            ))}
+          </div>
+        ) : (
+          <div className="uk-card uk-card-default rounded shadow p-4">
+            Our drivers are unavailable at the moment. Please wait or skip this
+            step.
+          </div>
+        )}
       </div>
     ) : (
       <div uk-spinner=""></div>

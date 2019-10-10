@@ -11,6 +11,7 @@ import ContactPage from "../pages/Contact";
 import HireDriverPage from "../pages/HireDriver";
 import BookRidePage from "../pages/BookRide";
 import SettingsPage from "../pages/Settings";
+import OrdersPage from "../pages/Orders";
 
 import { BrowserRouter as Router, Route } from "react-router-dom";
 import * as ROUTES from "../constants/routes";
@@ -38,6 +39,10 @@ class App extends Component {
         <Route
           path={ROUTES.BOOKRIDE}
           render={props => <BookRidePage {...props} {...this.props} />}
+        />
+        <Route
+          path={ROUTES.ORDERS}
+          render={props => <OrdersPage {...props} {...this.props} />}
         />
         <Route
           path={ROUTES.SETTINGS}

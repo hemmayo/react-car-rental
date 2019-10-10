@@ -46,6 +46,10 @@ class Firebase {
   // Cars API
   driver = uid => this.db.ref(`drivers/${uid}`);
   drivers = () => this.db.ref("drivers");
+
+  // Orders API
+  order = uid => this.db.ref(`orders/${uid}`);
+  orders = () => this.db.ref("bookings");
 }
 
 const withFirebase = Component => props => (
