@@ -3,6 +3,7 @@ import SimpleStorage from "react-simple-storage";
 import moment from "moment";
 import { withFirebase } from "../../../components/Firebase";
 import { withRouter } from "react-router-dom";
+import { getPrice } from "../../../helpers";
 
 import MiniBar from "../MiniBar";
 import Step1 from "./Step1";
@@ -21,7 +22,9 @@ const INITIAL_STATE = {
   dropoffDate: {},
   age: "",
   carId: "",
+  carRate: "",
   driverId: "",
+  driverRate: "",
   error: null
 };
 
@@ -151,7 +154,9 @@ class BookRideBase extends Component {
       dropoffDate,
       currentStep,
       carId,
+      carRate,
       driverId,
+      driverRate,
       error,
       age
     } = this.state;
@@ -169,6 +174,9 @@ class BookRideBase extends Component {
         dropoffDate.length > 0 &&
         currentStep === this.props.numberOfSteps
       ) {
+        const price =
+          getPrice(carRate, pickupDate, dropoffDate) +
+          getPrice(driverRate, pickupDate, dropoffDate);
         this.props.firebase
           .orders()
           .push({
@@ -178,12 +186,14 @@ class BookRideBase extends Component {
             pickupDate,
             dropoffDate,
             carId,
-            driverId,
+            driverId: driverId || null,
+            price,
+            userId: this.props.firebase.auth.currentUser.uid,
             status: "not_paid"
           })
           .then(() => {
             this.setState({ ...INITIAL_STATE });
-            this.props.history.push("/bookings");
+            this.props.history.push("/orders");
           })
           .catch(err => {
             this.setState({

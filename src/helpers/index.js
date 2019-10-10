@@ -1,3 +1,5 @@
+import moment from "moment";
+
 const snapshotToArray = snapshot => {
   if (snapshot) {
     const snapshotList = Object.keys(snapshot).map(key => ({
@@ -14,4 +16,17 @@ const snapshotToObject = snapshot => {
   }
 };
 
-export { snapshotToArray, snapshotToObject };
+const getPrice = (rate, start, end) => {
+  start = moment(start);
+  end = moment(end);
+
+  const duration = moment.duration(end.diff(start));
+  const hours = duration.asHours();
+  const price = Number(hours * rate);
+  return typeof price === "number" ? price : 0;
+};
+
+const numberWithCommas = num => {
+  return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+};
+export { snapshotToArray, snapshotToObject, getPrice, numberWithCommas };

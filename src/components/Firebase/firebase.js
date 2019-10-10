@@ -49,7 +49,7 @@ class Firebase {
 
   // Orders API
   order = uid => this.db.ref(`orders/${uid}`);
-  orders = () => this.db.ref("bookings");
+  orders = () => this.db.ref("orders");
 }
 
 const withFirebase = Component => props => (

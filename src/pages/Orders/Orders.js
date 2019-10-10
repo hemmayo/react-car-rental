@@ -1,6 +1,12 @@
 import React, { Component } from "react";
+import moment from "moment";
 import { withFirebase } from "../../components/Firebase";
-import { snapshotToArray, snapshotToObject } from "../../helpers";
+import {
+  snapshotToArray,
+  snapshotToObject,
+  getPrice,
+  numberWithCommas
+} from "../../helpers";
 
 class Orders extends Component {
   state = {
@@ -12,18 +18,36 @@ class Orders extends Component {
     let orders;
     this.props.firebase.orders().on("value", snapshot => {
       orders = snapshotToArray(snapshot.val());
-      this.setState({ orders }, () => {
-        orders.map((order, i) => {
+      if (orders) {
+        let od = [...orders];
+        od.forEach((order, i) => {
           this.props.firebase
             .cars(order.carId)
             .once("value")
             .then(snapshot => {
-              orders[i] = { ...order, car: snapshotToObject(snapshot.val()) };
-              this.setState({ orders: [...orders] });
+              od[i] = { ...order, car: snapshotToObject(snapshot.val()) };
+
+              this.setState({ orders: od });
+              return od;
+            })
+            .then(od => {
+              od.forEach((order, i) => {
+                order.driverId &&
+                  this.props.firebase
+                    .drivers(order.driverId)
+                    .once("value")
+                    .then(snapshot => {
+                      od[i] = {
+                        ...order,
+                        driver: snapshotToObject(snapshot.val())
+                      };
+                      this.setState({ orders: od });
+                    });
+              });
             });
         });
-      });
-      this.setState({ orders, loading: false });
+      }
+      this.setState({ loading: false });
     });
   }
 
@@ -33,39 +57,73 @@ class Orders extends Component {
 
   render() {
     const { loading, orders } = this.state;
-    console.log(orders);
-
-    return !loading ? (
-      <table class="uk-table uk-table-justify uk-table-divider">
+    return orders && !loading ? (
+      <table class="uk-table uk-table-divider uk-table-responsive uk-table-middle">
         <thead>
           <tr>
-            <th>Car</th>
+            <th class="uk-width-medium">Car</th>
             <th>Pickup</th>
-
-            {/* <th>Dropoff</th> */}
             <th>Dropoff</th>
             <th>Driver</th>
-            <th class="uk-width-small">Action</th>
+            <th>Price</th>
+            <th class="uk-width-small">Status</th>
           </tr>
         </thead>
         <tbody>
           {orders.map(order => {
-            const carName =
-              order.car &&
-              order.car.manufacturer +
+            let carName, status;
+            if (order.car) {
+              carName =
+                order.car.manufacturer +
                 ` ` +
                 order.car.model +
                 " " +
                 order.car.year;
 
-            const status = order.status === "not_paid" ? "Pay now" : "Paid";
+              status = order.status === "not_paid" ? "Pay now" : "Paid";
+
+              getPrice(order.car.rate, order.pickupDate, order.dropoffDate);
+            }
 
             return (
               <tr>
-                <td>{carName}</td>
-                <td>{order.pickup}</td>
-                <td>{order.dropoff}</td>
-                <td>{order.driverId ? order.driverId : "No driver"}</td>
+                <td className="flex">
+                  <img class="w-24 mr-4" src={order.car && order.car.image} />
+                  <div className="flex flex-col justify-center">
+                    <span>{carName}</span>
+                    <span className="text-sm uk-text-lead">4 seats</span>
+                  </div>
+                </td>
+                <td>
+                  <div className="flex flex-col">
+                    {order.pickup}
+                    <span className="text-sm">
+                      {moment(order.pickupDate).format("ddd, Do MMMM, YYYY")}
+                    </span>
+                  </div>
+                </td>
+                <td>
+                  <div className="flex flex-col">
+                    {order.dropoff}
+                    <span className="text-sm">
+                      {moment(order.dropoffDate).format("ddd, Do MMMM, YYYY")}
+                    </span>
+                  </div>
+                </td>
+                <td>
+                  <div className="flex items-center">
+                    {order.driver && (
+                      <img
+                        class="w-10 rounded-full mr-4"
+                        src={order.driver.image}
+                      />
+                    )}
+                    <span>
+                      {order.driver ? order.driver.name : "No driver"}
+                    </span>
+                  </div>
+                </td>
+                <td>&#8358;{numberWithCommas(Number(order.price))}</td>
 
                 <td>
                   <button
@@ -75,6 +133,7 @@ class Orders extends Component {
                         : "bg-green-600"
                     } rounded`}
                     type="button"
+                    disabled={order.status !== "not_paid"}
                   >
                     {status}
                   </button>
@@ -84,8 +143,10 @@ class Orders extends Component {
           })}
         </tbody>
       </table>
-    ) : (
+    ) : !orders && loading ? (
       <div uk-spinner=""></div>
+    ) : (
+      <div>No order available. </div>
     );
   }
 }

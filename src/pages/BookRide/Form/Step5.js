@@ -26,9 +26,10 @@ class Step5 extends Component {
       });
   }
 
-  selectCar = uid => {
+  selectCar = (uid, rate) => {
     this.setState({ selectedCar: uid });
     this.props.editState("carId", uid);
+    this.props.editState("carRate", rate);
   };
 
   render() {
@@ -41,7 +42,7 @@ class Step5 extends Component {
     }
 
     return !loading ? (
-      <div className="self-start text-left">
+      <div className="w-full text-left">
         <h1 className="text-xl font-semibold text-primary my-8">Select Car:</h1>
         <div className="grid grid-col-2 grid-gap md:grid-col-4">
           {cars.map(car => (

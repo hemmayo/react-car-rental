@@ -48,7 +48,7 @@ export default class Car extends Component {
           <button
             onClick={e => {
               e.preventDefault();
-              !selected ? selectCar(uid) : selectCar("");
+              !selected ? selectCar(uid, rate) : selectCar(null, null);
             }}
             class={`uk-button rounded ${
               selected

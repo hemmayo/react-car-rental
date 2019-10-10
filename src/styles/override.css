@@ -42,6 +42,10 @@ h6,
   grid-template-columns: repeat(4, 1fr);
 }
 
+.grid-col-5 {
+  grid-template-columns: repeat(5, 1fr);
+}
+
 .grid-gap {
   grid-gap: 1.5rem;
 }
@@ -55,6 +59,9 @@ h6,
   }
   .sm\:grid-col-4 {
     grid-template-columns: repeat(4, 1fr);
+  }
+  .sm\:grid-col-5 {
+    grid-template-columns: repeat(5, 1fr);
   }
   .sm\:grid-gap {
     grid-gap: 1.5rem;
@@ -70,6 +77,9 @@ h6,
   }
   .md\:grid-col-4 {
     grid-template-columns: repeat(4, 1fr);
+  }
+  .md\:grid-col-5 {
+    grid-template-columns: repeat(5, 1fr);
   }
   .md\:grid-gap {
     grid-gap: 1.5rem;

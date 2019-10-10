@@ -26,9 +26,10 @@ class Step6 extends Component {
       });
   }
 
-  selectDriver = uid => {
+  selectDriver = (uid, rate) => {
     this.setState({ selectedDriver: uid });
     this.props.editState("driverId", uid);
+    this.props.editState("driverRate", rate);
   };
 
   render() {
@@ -41,7 +42,7 @@ class Step6 extends Component {
     }
 
     return !loading ? (
-      <div className="self-start text-left">
+      <div className="w-full text-left">
         <h1 className="text-xl font-semibold text-primary mt-8 mb-2">
           Select Driver
         </h1>
@@ -49,7 +50,7 @@ class Step6 extends Component {
           If you don't need a driver, simply skip this step.
         </p>
         {drivers.length > 0 ? (
-          <div className="grid grid-col-2 grid-gap md:grid-col-4">
+          <div className="grid grid-col-2 grid-gap md:grid-col-5">
             {drivers.map(driver => (
               <Driver
                 key={driver.uid}

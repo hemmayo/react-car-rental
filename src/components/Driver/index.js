@@ -7,13 +7,14 @@ export default class Driver extends Component {
       name,
       image,
       age,
+      rate,
       isAvailable,
       selected,
       selectDriver
     } = this.props;
 
     return (
-      <div className="flex flex-col justify-around uk-card uk-card-default p-4 text-sm text-primary hover:text-primary hover:no-underline hover:shadow-lg shadow rounded cursor-pointer">
+      <div className="flex flex-col justify-around items-center uk-card uk-card-default p-4 text-sm text-primary hover:text-primary hover:no-underline hover:shadow-lg shadow rounded cursor-pointer">
         <div className="image p-2">
           <img src={image} className="h-40 rounded-full" />
         </div>
@@ -23,7 +24,7 @@ export default class Driver extends Component {
           <button
             onClick={e => {
               e.preventDefault();
-              !selected ? selectDriver(uid) : selectDriver(null);
+              !selected ? selectDriver(uid, rate) : selectDriver(null, null);
             }}
             class={`uk-button rounded ${
               selected
