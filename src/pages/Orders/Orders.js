@@ -19,7 +19,7 @@ class Orders extends Component {
     this.props.firebase.orders().on("value", snapshot => {
       orders = snapshotToArray(snapshot.val());
       if (orders) {
-        let od = [...orders];
+        const od = [...orders];
         od.forEach((order, i) => {
           this.props.firebase
             .cars(order.carId)
@@ -130,7 +130,7 @@ class Orders extends Component {
                     class={`uk-button ${
                       order.status === "not_paid"
                         ? "uk-button-default"
-                        : "bg-green-600"
+                        : "bg-green-500 text-gray-100"
                     } rounded`}
                     type="button"
                     disabled={order.status !== "not_paid"}
