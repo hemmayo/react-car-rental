@@ -15,8 +15,10 @@ class Dashboard extends Component {
           </h1>
           <h1 className="text-xl">What would you like to do today?</h1>
         </div>
-        <div>
-          <Link to={ROUTES.BOOKRIDE}>Book a ride</Link>
+        <div className="flex flex-col items-center">
+          <Link to={ROUTES.BOOKRIDE}>Book a Ride</Link>
+          <Link to={ROUTES.HIREDRIVER}>Hire a Driver</Link>
+          <Link to={ROUTES.ORDERS}>View Orders</Link>
         </div>
       </Layout>
     );

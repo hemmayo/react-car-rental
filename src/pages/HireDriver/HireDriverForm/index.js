@@ -5,24 +5,16 @@ import { withFirebase } from "../../../components/Firebase";
 import { withRouter } from "react-router-dom";
 import { getPrice } from "../../../helpers";
 
-import MiniBar from "../MiniBar";
 import Step1 from "./Step1";
 import Step2 from "./Step2";
 import Step3 from "./Step3";
-import Step4 from "./Step4";
-import Step5 from "./Step5";
-import Step6 from "./Step6";
 import Alert from "../../../components/Alert";
 
 const INITIAL_STATE = {
   currentStep: 1,
   pickup: "",
-  dropoff: "",
   pickupDate: {},
   dropoffDate: {},
-  age: "",
-  carId: "",
-  carRate: "",
   driverId: "",
   driverRate: "",
   error: null
@@ -34,19 +26,11 @@ class BookRideBase extends Component {
   };
 
   static defaultProps = {
-    numberOfSteps: 6
+    numberOfSteps: 3
   };
 
   _next = () => {
-    const {
-      pickup,
-      dropoff,
-      pickupDate,
-      dropoffDate,
-      currentStep,
-      carId,
-      driverId
-    } = this.state;
+    const { pickup, pickupDate, currentStep, driverId } = this.state;
 
     let canMove = false;
     let errorMessage;
@@ -54,23 +38,15 @@ class BookRideBase extends Component {
     switch (currentStep) {
       case 1:
         canMove = pickup.length > 0;
-        errorMessage = "You must have a pickup location!";
+        errorMessage = "Choose your nearest centre!";
         break;
       case 2:
-        canMove = dropoff.length > 0;
-        errorMessage = "Tell us where you would like to drop-off!";
+        canMove = pickupDate.length > 0;
+        errorMessage = "We'd love to know how long you'll need the driver.";
         break;
       case 3:
-        canMove = pickupDate.length > 0;
-        errorMessage = "We'd love to know when you'll pick-up the car.";
-        break;
-      case 4:
-        canMove = dropoffDate.length > 0;
-        errorMessage = "Please select your age range.";
-        break;
-      case 5:
-        canMove = !!carId;
-        errorMessage = "C'mon man! Choose a car!";
+        canMove = driverId.length > 0;
+        errorMessage = "Choose a driver!";
         break;
       default:
         canMove = currentStep > 4 && currentStep <= this.props.numberOfSteps;
@@ -149,16 +125,12 @@ class BookRideBase extends Component {
     evt.preventDefault();
     const {
       pickup,
-      dropoff,
       pickupDate,
       dropoffDate,
       currentStep,
-      carId,
-      carRate,
       driverId,
       driverRate,
-      error,
-      age
+      error
     } = this.state;
 
     if (currentStep < this.props.numberOfSteps) {
@@ -166,27 +138,21 @@ class BookRideBase extends Component {
     } else {
       if (
         pickup &&
-        dropoff &&
-        carId &&
+        driverId &&
         error === null &&
-        age &&
         pickupDate.length > 0 &&
         dropoffDate.length > 0 &&
         currentStep === this.props.numberOfSteps
       ) {
-        const price =
-          getPrice(carRate, pickupDate, dropoffDate) +
-          getPrice(driverRate, pickupDate, dropoffDate);
+        const price = getPrice(driverRate, pickupDate, dropoffDate);
         this.props.firebase
           .orders()
           .push({
             pickup,
-            dropoff,
-            age,
+            dropoff: pickup,
             pickupDate,
             dropoffDate,
-            carId,
-            driverId: driverId || null,
+            driverId: driverId,
             price,
             userId: this.props.firebase.auth.currentUser.uid,
             status: "not_paid"
@@ -236,46 +202,27 @@ class BookRideBase extends Component {
   render() {
     return (
       <React.Fragment>
-        <MiniBar
-          type={this.state.currentStep > 4 ? "full" : "mini"}
-          {...this.state}
-        />
         <form
           className="relative flex flex-col text-center items-center w-full"
           onSubmit={this.handleSubmit}
         >
-          <SimpleStorage parent={this} prefix={"BookRideComponent"} />
+          <SimpleStorage parent={this} prefix={"HireDriverComponent"} />
+
           <Step1
             currentStep={this.state.currentStep}
             handleChange={this.handleChange}
             pickup={this.state.pickup}
             me={this.props.me}
           />
+
           <Step2
-            currentStep={this.state.currentStep}
-            handleChange={this.handleChange}
-            editState={this.editState}
-            dropoff={this.state.dropoff}
-            pickup={this.state.pickup}
-          />
-          <Step3
             currentStep={this.state.currentStep}
             onDatesChange={this.onDatesChange}
             pickupDate={this.state.pickupDate}
             dropoffDate={this.state.dropoffDate}
           />
-          <Step4
-            currentStep={this.state.currentStep}
-            editState={this.editState}
-            age={this.state.age}
-          />
 
-          <Step5
-            currentStep={this.state.currentStep}
-            editState={this.editState}
-            selectedCar={this.state.carId}
-          />
-          <Step6
+          <Step3
             currentStep={this.state.currentStep}
             editState={this.editState}
             selectedDriver={this.state.driverId}

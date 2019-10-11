@@ -1,12 +1,7 @@
 import React, { Component } from "react";
 import moment from "moment";
 import { withFirebase } from "../../components/Firebase";
-import {
-  snapshotToArray,
-  snapshotToObject,
-  getPrice,
-  numberWithCommas
-} from "../../helpers";
+import { snapshotToArray, numberWithCommas } from "../../helpers";
 
 class Orders extends Component {
   state = {
@@ -17,29 +12,35 @@ class Orders extends Component {
   componentDidMount() {
     let orders;
     this.props.firebase.orders().on("value", snapshot => {
-      orders = snapshotToArray(snapshot.val());
+      orders = snapshotToArray(snapshot.val()).filter(
+        order => order.userId === this.props.firebase.auth.currentUser.uid
+      );
       if (orders) {
         const od = [...orders];
         od.forEach((order, i) => {
           this.props.firebase
-            .cars(order.carId)
+            .car(order.carId)
             .once("value")
             .then(snapshot => {
-              od[i] = { ...order, car: snapshotToObject(snapshot.val()) };
+              const car = snapshot.val();
+              if (car) {
+                od[i] = { ...order, car };
 
-              this.setState({ orders: od });
+                this.setState({ orders: od });
+              }
+
               return od;
             })
             .then(od => {
               od.forEach((order, i) => {
                 order.driverId &&
                   this.props.firebase
-                    .drivers(order.driverId)
+                    .driver(order.driverId)
                     .once("value")
                     .then(snapshot => {
                       od[i] = {
                         ...order,
-                        driver: snapshotToObject(snapshot.val())
+                        driver: snapshot.val()
                       };
                       this.setState({ orders: od });
                     });
@@ -79,20 +80,25 @@ class Orders extends Component {
                 order.car.model +
                 " " +
                 order.car.year;
-
-              status = order.status === "not_paid" ? "Pay now" : "Paid";
-
-              getPrice(order.car.rate, order.pickupDate, order.dropoffDate);
             }
+            status = order.status === "not_paid" ? "Pay now" : "Paid";
 
             return (
               <tr>
-                <td className="flex">
-                  <img class="w-24 mr-4" src={order.car && order.car.image} />
-                  <div className="flex flex-col justify-center">
-                    <span>{carName}</span>
-                    <span className="text-sm uk-text-lead">4 seats</span>
-                  </div>
+                <td>
+                  {order.car ? (
+                    <div className="flex">
+                      <img class="w-24 mr-4" src={order.car.image} />
+                      <div className="flex flex-col justify-center">
+                        <span>{carName}</span>
+                        <span className="text-sm uk-text-lead">
+                          {order.car.noSeats} seats
+                        </span>
+                      </div>
+                    </div>
+                  ) : (
+                    "No car"
+                  )}
                 </td>
                 <td>
                   <div className="flex flex-col">
