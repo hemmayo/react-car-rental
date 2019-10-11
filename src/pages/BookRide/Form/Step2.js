@@ -86,11 +86,11 @@ export default class Step2 extends Component {
             </>
           ) : (
             <div className="my-2">
-              <a
+              <span
                 className="uk-form-icon uk-form-icon-flip"
                 href="#"
                 uk-icon="icon: arrow-right"
-              ></a>
+              ></span>
               <input
                 className="uk-input uk-form-width-large uk-form-large rounded"
                 type="text"

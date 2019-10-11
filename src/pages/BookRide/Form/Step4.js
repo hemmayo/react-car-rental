@@ -22,7 +22,7 @@ export default class Step4 extends Component {
               <g transform="translate(652.000000, 209.000000)">
                 <g
                   transform="translate(0.000000, 7.000000)"
-                  fill-rule="nonzero"
+                  fillRule="nonzero"
                 >
                   <g transform="translate(4.000000, 0.000000)">
                     <path
@@ -107,7 +107,7 @@ export default class Step4 extends Component {
           </h2>
         </div>
         <div className="my-2 uk-inline w-full md:w-1/3">
-          <div class=" uk-button-group my-2">
+          <div className=" uk-button-group my-2">
             <button
               type="button"
               className={`uk-button uk-button-large ${

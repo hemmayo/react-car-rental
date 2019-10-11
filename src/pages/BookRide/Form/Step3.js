@@ -6,7 +6,7 @@ import "react-dates/lib/css/_datepicker.css";
 
 export default class Step3 extends Component {
   state = {
-    focusedInput: ""
+    focusedInput: null
   };
   render() {
     const { pickupDate, dropoffDate, currentStep, onDatesChange } = this.props;
@@ -106,7 +106,9 @@ export default class Step3 extends Component {
         <div className="my-2 uk-inline md:w-1/3">
           <DateRangePicker
             startDate={moment(pickupDate)}
+            startDateId="book_car_start_date"
             endDate={moment(dropoffDate)}
+            endDateId="book_car_start_date"
             withFullScreenPortal={true}
             orientation="vertical"
             onDatesChange={onDatesChange}

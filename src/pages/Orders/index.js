@@ -10,7 +10,7 @@ const Orders = props => {
       <div className="w-full py-2">
         <h1 className="uk-heading-bullet text-xl md:text-2xl">My Orders</h1>
         <div className="py-4">
-          <OrdersTable />
+          <OrdersTable me={props.me} />
         </div>
       </div>
     </Layout>

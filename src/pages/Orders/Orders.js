@@ -1,22 +1,26 @@
 import React, { Component } from "react";
 import moment from "moment";
+import PaystackButton from "react-paystack";
+
 import { withFirebase } from "../../components/Firebase";
 import { snapshotToArray, numberWithCommas } from "../../helpers";
 
 class Orders extends Component {
   state = {
     orders: null,
+    key: "pk_test_0666e4531f6f0b07e7b19f7b767a4f7d5075e30a",
+    currentOrder: null,
     loading: true
   };
 
   componentDidMount() {
     let orders;
     this.props.firebase.orders().on("value", snapshot => {
-      orders = snapshotToArray(snapshot.val()).filter(
+      orders = (snapshotToArray(snapshot.val()) || []).filter(
         order => order.userId === this.props.firebase.auth.currentUser.uid
       );
       if (orders) {
-        const od = [...orders];
+        const od = [...orders].reverse();
         od.forEach((order, i) => {
           this.props.firebase
             .car(order.carId)
@@ -56,23 +60,48 @@ class Orders extends Component {
     this.props.firebase.orders().off();
   }
 
+  paymentCallback = response => {
+    const firebase = this.props.firebase;
+    const { currentOrder } = this.state;
+    console.log(currentOrder);
+    // if (response.status === "success") {
+    firebase.order(currentOrder.uid).set({ ...currentOrder, status: "paid" });
+    // }
+  };
+
+  onPaymentClose = () => {
+    console.log("Payment closed");
+  };
+
+  getReference = () => {
+    //you can put any unique reference implementation code here
+    let text = "";
+    let possible =
+      "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-.=";
+
+    for (let i = 0; i < 15; i++)
+      text += possible.charAt(Math.floor(Math.random() * possible.length));
+
+    return text;
+  };
+
   render() {
     const { loading, orders } = this.state;
     return orders && !loading ? (
-      <table class="uk-table uk-table-divider uk-table-responsive uk-table-middle">
+      <table className="uk-table uk-table-divider uk-table-responsive uk-table-middle">
         <thead>
           <tr>
-            <th class="uk-width-medium">Car</th>
+            <th className="uk-width-medium">Car</th>
             <th>Pickup</th>
             <th>Dropoff</th>
             <th>Driver</th>
             <th>Price</th>
-            <th class="uk-width-small">Status</th>
+            <th className="uk-width-small">Status</th>
           </tr>
         </thead>
         <tbody>
           {orders.map(order => {
-            let carName, status;
+            let carName;
             if (order.car) {
               carName =
                 order.car.manufacturer +
@@ -81,14 +110,17 @@ class Orders extends Component {
                 " " +
                 order.car.year;
             }
-            status = order.status === "not_paid" ? "Pay now" : "Paid";
 
             return (
-              <tr>
+              <tr key={order.uid}>
                 <td>
                   {order.car ? (
                     <div className="flex">
-                      <img class="w-24 mr-4" src={order.car.image} />
+                      <img
+                        className="w-24 mr-4"
+                        alt={carName}
+                        src={order.car.image}
+                      />
                       <div className="flex flex-col justify-center">
                         <span>{carName}</span>
                         <span className="text-sm uk-text-lead">
@@ -120,7 +152,8 @@ class Orders extends Component {
                   <div className="flex items-center">
                     {order.driver && (
                       <img
-                        class="w-10 rounded-full mr-4"
+                        className="w-10 rounded-full mr-4"
+                        alt={order.driver.name}
                         src={order.driver.image}
                       />
                     )}
@@ -132,17 +165,35 @@ class Orders extends Component {
                 <td>&#8358;{numberWithCommas(Number(order.price))}</td>
 
                 <td>
-                  <button
-                    class={`uk-button ${
-                      order.status === "not_paid"
-                        ? "uk-button-default"
-                        : "bg-green-500 text-gray-100"
-                    } rounded`}
-                    type="button"
-                    disabled={order.status !== "not_paid"}
-                  >
-                    {status}
-                  </button>
+                  {order.status === "not_paid" ? (
+                    <PaystackButton
+                      text="Pay now"
+                      className={`w-full uk-button ${
+                        order.status === "not_paid"
+                          ? "uk-button-default"
+                          : "bg-green-500 text-gray-100"
+                      } rounded`}
+                      disabled={order.status !== "not_paid"}
+                      callback={response => {
+                        this.setState({ currentOrder: order });
+                        this.paymentCallback(response);
+                      }}
+                      close={this.onPaymentClose}
+                      embed={false}
+                      reference={this.getReference()}
+                      email={this.props.me.email}
+                      amount={order.price * 100}
+                      paystackkey={this.state.key}
+                      tag="button"
+                    />
+                  ) : (
+                    <span
+                      className="w-full uk-button
+                      bg-green-500 text-gray-100 rounded"
+                    >
+                      Paid
+                    </span>
+                  )}
                 </td>
               </tr>
             );

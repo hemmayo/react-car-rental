@@ -51,11 +51,10 @@ export default class Step1 extends Component {
           <h2 className="text-xl">Choose a centre near you.</h2>
         </div>
         <div className="my-2 uk-inline w-full md:w-1/3">
-          <a
+          <span
             className="uk-form-icon uk-form-icon-flip"
-            href="#"
             uk-icon="icon: location"
-          ></a>
+          ></span>
           <input
             className="uk-input uk-form-large rounded"
             type="text"

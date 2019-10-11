@@ -48,7 +48,7 @@ class PasswordChangeForm extends Component {
           </h1>
           <div className="py-6 w-full md:w-1/3">
             <form onSubmit={this.onSubmit}>
-              <div class="uk-margin">
+              <div className="uk-margin">
                 <input
                   className="uk-input"
                   name="passwordOne"
@@ -58,7 +58,7 @@ class PasswordChangeForm extends Component {
                   placeholder="New Password"
                 />
               </div>
-              <div class="uk-margin">
+              <div className="uk-margin">
                 <input
                   className="uk-input"
                   name="passwordTwo"

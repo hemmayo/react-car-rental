@@ -4,6 +4,7 @@ export default class Car extends Component {
   render() {
     const {
       uid,
+      image,
       manufacturer,
       model,
       year,
@@ -19,6 +20,8 @@ export default class Car extends Component {
       <a
         href={`https://www.google.com/search?q=${carName}`}
         target="_blank"
+        alt={carName}
+        rel="noopener noreferrer"
         className="flex flex-col justify-between uk-card uk-card-default p-4 text-sm text-primary hover:text-primary hover:no-underline hover:shadow-lg shadow rounded cursor-pointer"
         title="Click to know more"
       >
@@ -39,7 +42,7 @@ export default class Car extends Component {
           </div>
         </div>
         <div className="image p-2">
-          <img src="https://www.stickpng.com/assets/images/580b585b2edbce24c47b2c1c.png" />
+          <img src={image} alt={carName} />
         </div>
         <div className="flex justify-between items-center text-xl">
           <span>
@@ -50,15 +53,15 @@ export default class Car extends Component {
               e.preventDefault();
               !selected ? selectCar(uid, rate) : selectCar(null, null);
             }}
-            class={`uk-button rounded ${
+            className={`uk-button rounded ${
               selected
                 ? "bg-primary text-gray-100"
                 : "uk-button-default text-primary"
             }`}
           >
             {selected ? (
-              <div class="flex items-center">
-                <span class="mr-2" uk-icon="check"></span>
+              <div className="flex items-center">
+                <span className="mr-2" uk-icon="check"></span>
                 Selected
               </div>
             ) : (

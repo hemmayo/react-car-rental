@@ -176,7 +176,7 @@ class BookRideBase extends Component {
           currentStep: 1,
           error: {
             type: "warning",
-            message: "Please make sure that you completed the form."
+            message: "Please ensure that you fill the form."
           }
         });
         setTimeout(() => this.setState({ error: null }), 2500);
@@ -230,7 +230,7 @@ class BookRideBase extends Component {
 
           {this.state.error && <Alert {...this.state.error} />}
 
-          <div class="uk-button-group my-4">
+          <div className="uk-button-group my-4">
             {this.previousButton}
             {this.nextButton}
           </div>

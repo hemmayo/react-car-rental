@@ -1,6 +1,4 @@
 import React, { Component } from "react";
-import { SingleDatePicker } from "react-dates";
-import moment from "moment";
 
 export default class MiniBar extends Component {
   state = {

@@ -44,8 +44,7 @@ class BookRideBase extends Component {
       pickupDate,
       dropoffDate,
       currentStep,
-      carId,
-      driverId
+      carId
     } = this.state;
 
     let canMove = false;
@@ -283,7 +282,7 @@ class BookRideBase extends Component {
 
           {this.state.error && <Alert {...this.state.error} />}
 
-          <div class="uk-button-group my-4">
+          <div className="uk-button-group my-4">
             {this.previousButton}
             {this.nextButton}
           </div>

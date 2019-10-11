@@ -49,7 +49,9 @@ const UserNav = ({ user, firebase }) => (
             </li>
             <li className="uk-nav-divider"></li>
             <li>
-              <NavLink onClick={firebase.doSignOut}>Sign out</NavLink>
+              <NavLink to={ROUTES.SIGNOUT} onClick={firebase.doSignOut}>
+                Sign out
+              </NavLink>
             </li>
           </ul>
         </div>
