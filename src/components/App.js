@@ -10,8 +10,9 @@ import AboutPage from "../pages/About";
 import ContactPage from "../pages/Contact";
 import HireDriverPage from "../pages/HireDriver";
 import BookRidePage from "../pages/BookRide";
-import SettingsPage from "../pages/Settings";
+import ProfilePage from "../pages/Profile";
 import OrdersPage from "../pages/Orders";
+import PasswordChangePage from "../pages/PasswordChange";
 
 import { BrowserRouter as Router, Route } from "react-router-dom";
 import * as ROUTES from "../constants/routes";
@@ -46,7 +47,15 @@ class App extends Component {
         />
         <Route
           path={ROUTES.SETTINGS}
-          render={props => <SettingsPage {...props} {...this.props} />}
+          render={props => <ProfilePage {...props} {...this.props} />}
+        />
+        <Route
+          path={ROUTES.PROFILE}
+          render={props => <ProfilePage {...props} {...this.props} />}
+        />
+        <Route
+          path={ROUTES.PASSWORDCHANGE}
+          render={props => <PasswordChangePage {...props} {...this.props} />}
         />
       </Router>
     );
