@@ -20,9 +20,9 @@ const customStyles = {
 
 Modal.setAppElement("#root");
 
-class Cars extends Component {
+class Drivers extends Component {
   state = {
-    cars: null,
+    drivers: null,
     loading: true,
     modalIsOpen: false,
     modalData: {},
@@ -31,19 +31,19 @@ class Cars extends Component {
 
   componentDidMount() {
     const { firebase } = this.props;
-    firebase.cars().on("value", snapshot => {
-      const cars = snapshotToArray(snapshot.val());
-      this.setState({ cars, loading: false });
+    firebase.drivers().on("value", snapshot => {
+      const drivers = snapshotToArray(snapshot.val());
+      this.setState({ drivers, loading: false });
     });
   }
 
   componentWillUnmount() {
     const { firebase } = this.props;
-    firebase.cars().off();
+    firebase.drivers().off();
   }
 
-  openModal = car => {
-    this.setState({ modalIsOpen: true, modalData: car });
+  openModal = driver => {
+    this.setState({ modalIsOpen: true, modalData: driver });
   };
 
   afterOpenModal = () => {
@@ -68,21 +68,21 @@ class Cars extends Component {
   onUpdate = evt => {
     evt.preventDefault();
     const { firebase } = this.props;
-    const car = {
+    const driver = {
       ...this.state.modalData,
       lastUpdated: moment({}).format()
     };
 
     firebase
-      .car(car.uid)
+      .driver(driver.uid)
       .set({
-        ...car
+        ...driver
       })
       .then(() => {
         this.setState({
           error: {
             type: "success",
-            message: "Car updated!"
+            message: "Driver updated!"
           }
         });
         setTimeout(() => this.setState({ error: null }), 2500);
@@ -95,22 +95,20 @@ class Cars extends Component {
 
   render() {
     const { route } = this.props;
-    const { cars, loading, modalData, modalIsOpen, error } = this.state;
+    const { drivers, loading, modalData, modalIsOpen, error } = this.state;
     const {
-      model,
-      vehicleNumber,
-      year,
-      manufacturer,
-      isAvailable,
+      age,
+      name,
       image,
-      transmissionMode,
-      rate,
+      isAvailable,
       branch,
-      noSeats
+      gender,
+      rate,
+      address,
+      phone
     } = modalData;
-    const isInvalid =
-      !model || !vehicleNumber || !year || !rate || !noSeats || !manufacturer;
-    const shouldRender = route === ROUTES.ADMIN.CARS;
+    const isInvalid = !age || !name || !phone || !rate || !gender || !address;
+    const shouldRender = route === ROUTES.ADMIN.DRIVERS;
 
     return (
       shouldRender &&
@@ -120,57 +118,54 @@ class Cars extends Component {
           <table className="uk-table uk-table-middle uk-table-responsive uk-table-divider text-center md:text-left">
             <thead>
               <tr>
-                <th>Car</th>
-                <th>Vehicle Number</th>
-                <th>Transmission Mode</th>
+                <th>Driver</th>
+                <th>Phone Number</th>
+                <th>Address</th>
                 <th>Rate</th>
-                <th>Branch</th>
+                <th>Centre</th>
                 <th>Availability</th>
               </tr>
             </thead>
             <tbody>
-              {cars &&
-                cars.map(car => {
-                  const carName =
-                    car.manufacturer + ` ` + car.model + " " + car.year;
-
+              {drivers &&
+                drivers.map(driver => {
                   return (
-                    <tr key={car.uid}>
+                    <tr key={driver.uid}>
                       <td>
                         <div className="flex flex-col md:flex-row items-center">
                           <img
-                            className="w-1/2 md:w-24 mr-0 mb-4 md:mb-0 md:mr-4"
-                            alt={carName}
-                            src={car.image}
+                            className="w-1/3 md:w-16 mr-0 mb-4 md:mb-0 md:mr-4 rounded-full"
+                            alt={driver.name}
+                            src={driver.image}
                           />
                           <div className="flex flex-col justify-center">
                             <span className="text-lg md:text-base">
-                              {carName}
+                              {driver.name}
                             </span>
                             <span className="text-sm uk-text-lead">
-                              {car.noSeats} seats
+                              {driver.age} years
                             </span>
                           </div>
                         </div>
                       </td>
-                      <td>{car.vehicleNumber.toUpperCase()}</td>
-                      <td>{car.transmissionMode}</td>
-                      <td>&#8358;{numberWithCommas(car.rate)}/hr</td>
-                      <td>{car.branch}</td>
+                      <td>{driver.phone.toUpperCase()}</td>
+                      <td>{driver.address}</td>
+                      <td>&#8358;{numberWithCommas(driver.rate)}/hr</td>
+                      <td>{driver.centreId}</td>
                       <td>
                         <span
                           className={`uk-badge uk-padding-small ${
-                            car.isAvailable
+                            driver.isAvailable
                               ? "bg-teal-500"
                               : "bg-gray-300 text-gray-700 hover:text-gray-700"
                           }`}
                         >
-                          {car.isAvailable ? "Available" : "Unavailable"}
+                          {driver.isAvailable ? "Available" : "Unavailable"}
                         </span>
                       </td>
                       <td>
                         <button
-                          onClick={() => this.openModal(car)}
+                          onClick={() => this.openModal(driver)}
                           className="uk-button uk-button-default rounded"
                         >
                           Edit
@@ -185,12 +180,12 @@ class Cars extends Component {
               onAfterOpen={this.afterOpenModal}
               onRequestClose={this.closeModal}
               style={customStyles}
-              contentLabel="Edit Car"
+              contentLabel="Edit Driver"
             >
               <div className="uk-width-xlarge@s flex flex-col justify-between h-screen md:h-auto ">
                 <div className="flex justify-between mb-4">
                   <h1 className="uk-heading-bullet text-lg font-bold">
-                    Edit Car
+                    Edit Driver
                   </h1>
                   <span
                     className="cursor-pointer"
@@ -205,122 +200,35 @@ class Cars extends Component {
                     uk-grid=""
                   >
                     <div className="uk-width-1-2@s">
-                      <label
-                        className="uk-form-label text-base"
-                        htmlFor="manufacturer"
-                      >
-                        Manufacturer
+                      <label className="uk-form-label text-base" htmlFor="name">
+                        Name
                       </label>
                       <div className="uk-form-controls">
                         <input
                           className="uk-input"
-                          id="manufacturer"
-                          name="manufacturer"
+                          id="name"
+                          name="name"
                           type="text"
-                          value={manufacturer}
+                          value={name}
                           onChange={this.onModalInputChange}
-                          placeholder="Manufacturer"
+                          placeholder="Driver name"
                           required={true}
                         />
                       </div>
                     </div>
                     <div className="uk-width-1-4@s">
-                      <label
-                        className="uk-form-label text-base"
-                        htmlFor="model"
-                      >
-                        Model
+                      <label className="uk-form-label text-base" htmlFor="age">
+                        Age
                       </label>
                       <div className="uk-form-controls">
                         <input
                           className="uk-input"
-                          id="model"
-                          name="model"
+                          id="age"
+                          name="age"
                           type="text"
                           onChange={this.onModalInputChange}
-                          value={model}
-                          placeholder="Model"
-                          required={true}
-                        />
-                      </div>
-                    </div>
-                    <div className="uk-width-1-4@s">
-                      <label className="uk-form-label text-base" htmlFor="year">
-                        Year
-                      </label>
-                      <div className="uk-form-controls">
-                        <input
-                          className="uk-input"
-                          id="year"
-                          name="year"
-                          type="number"
-                          max={new Date().getFullYear()}
-                          onChange={this.onModalInputChange}
-                          value={year}
-                          placeholder="Year"
-                          required={true}
-                        />
-                      </div>
-                    </div>
-                    <div className="uk-width-1-2@s">
-                      <label
-                        className="uk-form-label text-base"
-                        htmlFor="vehicleNumber"
-                      >
-                        Vehicle Number
-                      </label>
-                      <div className="uk-form-controls">
-                        <input
-                          className="uk-input"
-                          id="vehicleNumber"
-                          name="vehicleNumber"
-                          type="text"
-                          onChange={this.onModalInputChange}
-                          value={vehicleNumber}
-                          placeholder="Vehicle Number"
-                          required={true}
-                        />
-                      </div>
-                    </div>
-                    <div className="uk-width-1-2@s">
-                      <label
-                        className="uk-form-label text-base"
-                        htmlFor="transmissionMode"
-                      >
-                        Transmission Mode
-                      </label>
-                      <div className="uk-form-controls">
-                        <select
-                          className="uk-select"
-                          id="transmissionMode"
-                          name="transmissionMode"
-                          type="text"
-                          onChange={this.onModalInputChange}
-                          value={transmissionMode}
-                          required={true}
-                        >
-                          <option>Manual</option>
-                          <option>Automatic</option>
-                        </select>
-                      </div>
-                    </div>
-                    <div className="uk-width-1-4@s">
-                      <label
-                        className="uk-form-label text-base"
-                        htmlFor="noSeats"
-                      >
-                        No. of Seats
-                      </label>
-                      <div className="uk-form-controls">
-                        <input
-                          className="uk-input"
-                          id="noSeats"
-                          name="noSeats"
-                          type="number"
-                          min="2"
-                          onChange={this.onModalInputChange}
-                          value={noSeats}
-                          placeholder="No. of Seats"
+                          value={age}
+                          placeholder="Age"
                           required={true}
                         />
                       </div>
@@ -335,7 +243,7 @@ class Cars extends Component {
                           id="rate"
                           name="rate"
                           type="number"
-                          min="20"
+                          min={18}
                           onChange={this.onModalInputChange}
                           value={rate}
                           placeholder="Rate"
@@ -346,9 +254,51 @@ class Cars extends Component {
                     <div className="uk-width-1-2@s">
                       <label
                         className="uk-form-label text-base"
+                        htmlFor="phone"
+                      >
+                        Phone Number
+                      </label>
+                      <div className="uk-form-controls">
+                        <input
+                          className="uk-input"
+                          id="phone"
+                          name="phone"
+                          type="text"
+                          onChange={this.onModalInputChange}
+                          value={phone}
+                          placeholder="Phone Number"
+                          required={true}
+                        />
+                      </div>
+                    </div>
+                    <div className="uk-width-1-4@s">
+                      <label
+                        className="uk-form-label text-base"
+                        htmlFor="gender"
+                      >
+                        Gender
+                      </label>
+                      <div className="uk-form-controls">
+                        <select
+                          className="uk-select"
+                          id="gender"
+                          name="gender"
+                          type="text"
+                          onChange={this.onModalInputChange}
+                          value={gender}
+                          required={true}
+                        >
+                          <option>Male</option>
+                          <option>Female</option>
+                        </select>
+                      </div>
+                    </div>
+                    <div className="uk-width-1-4@s">
+                      <label
+                        className="uk-form-label text-base"
                         htmlFor="branch"
                       >
-                        Branch
+                        Centre
                       </label>
                       <div className="uk-form-controls">
                         <select
@@ -394,7 +344,7 @@ class Cars extends Component {
                         disabled={isInvalid}
                         type="submit"
                       >
-                        Update Car
+                        Update Driver
                       </button>
                     </div>
                   </form>
@@ -411,4 +361,4 @@ class Cars extends Component {
   }
 }
 
-export default withFirebase(Cars);
+export default withFirebase(Drivers);
