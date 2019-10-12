@@ -63,7 +63,6 @@ class Orders extends Component {
   paymentCallback = response => {
     const firebase = this.props.firebase;
     const { currentOrder } = this.state;
-    console.log(currentOrder);
     // if (response.status === "success") {
     firebase.order(currentOrder.uid).set({ ...currentOrder, status: "paid" });
     // }

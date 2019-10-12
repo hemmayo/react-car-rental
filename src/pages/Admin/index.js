@@ -1,12 +1,25 @@
 import React, { Component } from "react";
 import { compose } from "recompose";
-// import { withFirebase } from "../../components/Firebase";
 import { withAuthorization } from "../../components/Session";
 import * as ROLES from "../../constants/roles";
+import Layout from "../../components/Layout";
+
+import AdminNav from "./AdminNav";
+import Cars from "./Cars";
 
 class AdminPage extends Component {
   render() {
-    return <div></div>;
+    const { history } = this.props;
+    const pathname = history.location.pathname;
+
+    return (
+      <Layout type="no-center">
+        <AdminNav />
+        <div className="py-6">
+          <Cars route={pathname} />
+        </div>
+      </Layout>
+    );
   }
 }
 

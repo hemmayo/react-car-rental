@@ -14,5 +14,9 @@ export const SIGNOUT = "/signout";
 export const SETTINGS = "/settings";
 
 export const ADMIN = {
-  HOME: "/admin"
+  ORDERS: "/admin",
+  CENTRES: "/admin/centres",
+  DRIVERS: "/admin/drivers",
+  CARS: "/admin/cars",
+  USERS: "/admin/users"
 };
