@@ -26,6 +26,7 @@ class Cars extends Component {
     loading: true,
     modalIsOpen: false,
     modalData: {},
+    modalAction: null,
     error: null
   };
 
@@ -42,8 +43,8 @@ class Cars extends Component {
     firebase.cars().off();
   }
 
-  openModal = car => {
-    this.setState({ modalIsOpen: true, modalData: car });
+  openModal = (action, car) => {
+    this.setState({ modalIsOpen: true, modalData: car, modalAction: action });
   };
 
   afterOpenModal = () => {
@@ -52,7 +53,7 @@ class Cars extends Component {
   };
 
   closeModal = () => {
-    this.setState({ modalIsOpen: false, modalData: {} });
+    this.setState({ modalIsOpen: false, modalData: {}, modalAction: null });
   };
 
   onModalInputChange = evt => {
@@ -65,37 +66,66 @@ class Cars extends Component {
     });
   };
 
+  toggleAvailability = car => {
+    car.isAvailable = !car.isAvailable;
+    this.props.firebase.car(car.uid).set(car);
+  };
+
   onUpdate = evt => {
     evt.preventDefault();
     const { firebase } = this.props;
+    const { modalData, modalAction } = this.state;
     const car = {
-      ...this.state.modalData,
+      ...modalData,
       lastUpdated: moment({}).format()
     };
-
-    firebase
-      .car(car.uid)
-      .set({
-        ...car
-      })
-      .then(() => {
-        this.setState({
-          error: {
-            type: "success",
-            message: "Car updated!"
-          }
+    if (modalAction === "edit") {
+      firebase
+        .car(car.uid)
+        .set(car)
+        .then(() => {
+          this.setState({
+            error: {
+              type: "success",
+              message: "Car updated!"
+            }
+          });
+          setTimeout(() => this.setState({ error: null }), 2500);
+        })
+        .catch(error => {
+          error.type = "warning";
+          this.setState({ error });
         });
-        setTimeout(() => this.setState({ error: null }), 2500);
-      })
-      .catch(error => {
-        error.type = "warning";
-        this.setState({ error });
-      });
+    } else if (modalAction === "create") {
+      firebase
+        .cars()
+        .push(car)
+        .then(() => {
+          this.setState({
+            error: {
+              type: "success",
+              message: "Car added!"
+            }
+          });
+          setTimeout(() => this.setState({ error: null }), 2500);
+        })
+        .catch(error => {
+          error.type = "warning";
+          this.setState({ error });
+        });
+    }
   };
 
   render() {
     const { route } = this.props;
-    const { cars, loading, modalData, modalIsOpen, error } = this.state;
+    const {
+      cars,
+      loading,
+      modalData,
+      modalIsOpen,
+      modalAction,
+      error
+    } = this.state;
     const {
       model,
       vehicleNumber,
@@ -116,7 +146,18 @@ class Cars extends Component {
       shouldRender &&
       (!loading ? (
         <>
-          <h1 className="uk-heading-bullet text-xl md:text-xl">Manage Cars</h1>
+          <div className="flex justify-between items-center">
+            <h1 className="uk-heading-bullet text-xl md:text-xl">
+              Manage Cars
+            </h1>
+            <button
+              onClick={() => this.openModal("create", {})}
+              className="uk-button uk-button-default rounded flex items-center"
+            >
+              <span className="mr-2" uk-icon="icon: plus"></span>Add new
+            </button>
+          </div>
+
           <table className="uk-table uk-table-middle uk-table-responsive uk-table-divider text-center md:text-left">
             <thead>
               <tr>
@@ -159,7 +200,9 @@ class Cars extends Component {
                       <td>{car.branch}</td>
                       <td>
                         <span
-                          className={`uk-badge uk-padding-small ${
+                          title="Tap to toggle availability"
+                          onClick={() => this.toggleAvailability(car)}
+                          className={`cursor-pointer uk-badge uk-padding-small ${
                             car.isAvailable
                               ? "bg-teal-500"
                               : "bg-gray-300 text-gray-700 hover:text-gray-700"
@@ -170,7 +213,7 @@ class Cars extends Component {
                       </td>
                       <td>
                         <button
-                          onClick={() => this.openModal(car)}
+                          onClick={() => this.openModal("edit", car)}
                           className="uk-button uk-button-default rounded"
                         >
                           Edit
@@ -189,8 +232,8 @@ class Cars extends Component {
             >
               <div className="uk-width-xlarge@s flex flex-col justify-between h-screen md:h-auto ">
                 <div className="flex justify-between mb-4">
-                  <h1 className="uk-heading-bullet text-lg font-bold">
-                    Edit Car
+                  <h1 className="uk-heading-bullet text-lg font-bold capitalize">
+                    {modalAction} Car
                   </h1>
                   <span
                     className="cursor-pointer"
@@ -299,6 +342,7 @@ class Cars extends Component {
                           value={transmissionMode}
                           required={true}
                         >
+                          <option value="">Choose mode</option>
                           <option>Manual</option>
                           <option>Automatic</option>
                         </select>
@@ -359,6 +403,7 @@ class Cars extends Component {
                           value={branch}
                           required={true}
                         >
+                          <option value="">Select branch</option>
                           <option>Ikeja</option>
                         </select>
                       </div>
@@ -388,13 +433,11 @@ class Cars extends Component {
                       {error && <Alert {...error} />}
 
                       <button
-                        className={`uk-button uk-button-${
-                          isInvalid ? "disabled" : "default"
-                        } rounded`}
+                        className={`uk-button uk-button-default rounded`}
                         disabled={isInvalid}
                         type="submit"
                       >
-                        Update Car
+                        {modalAction} Car
                       </button>
                     </div>
                   </form>

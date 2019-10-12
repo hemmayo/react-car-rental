@@ -26,6 +26,7 @@ class Drivers extends Component {
     loading: true,
     modalIsOpen: false,
     modalData: {},
+    modalAction: null,
     error: null
   };
 
@@ -42,8 +43,8 @@ class Drivers extends Component {
     firebase.drivers().off();
   }
 
-  openModal = driver => {
-    this.setState({ modalIsOpen: true, modalData: driver });
+  openModal = (action, car) => {
+    this.setState({ modalIsOpen: true, modalData: car, modalAction: action });
   };
 
   afterOpenModal = () => {
@@ -52,7 +53,7 @@ class Drivers extends Component {
   };
 
   closeModal = () => {
-    this.setState({ modalIsOpen: false, modalData: {} });
+    this.setState({ modalIsOpen: false, modalData: {}, modalAction: null });
   };
 
   onModalInputChange = evt => {
@@ -65,37 +66,67 @@ class Drivers extends Component {
     });
   };
 
+  toggleAvailability = driver => {
+    driver.isAvailable = !driver.isAvailable;
+    this.props.firebase.driver(driver.uid).set(driver);
+  };
+
   onUpdate = evt => {
     evt.preventDefault();
     const { firebase } = this.props;
+    const { modalData, modalAction } = this.state;
     const driver = {
-      ...this.state.modalData,
+      ...modalData,
       lastUpdated: moment({}).format()
     };
 
-    firebase
-      .driver(driver.uid)
-      .set({
-        ...driver
-      })
-      .then(() => {
-        this.setState({
-          error: {
-            type: "success",
-            message: "Driver updated!"
-          }
+    if (modalAction === "edit") {
+      firebase
+        .driver(driver.uid)
+        .set(driver)
+        .then(() => {
+          this.setState({
+            error: {
+              type: "success",
+              message: "Driver updated!"
+            }
+          });
+          setTimeout(() => this.setState({ error: null }), 2500);
+        })
+        .catch(error => {
+          error.type = "warning";
+          this.setState({ error });
         });
-        setTimeout(() => this.setState({ error: null }), 2500);
-      })
-      .catch(error => {
-        error.type = "warning";
-        this.setState({ error });
-      });
+    } else if (modalAction === "create") {
+      firebase
+        .drivers()
+        .push(driver)
+        .then(() => {
+          this.setState({
+            error: {
+              type: "success",
+              message: "Driver added!"
+            }
+          });
+          setTimeout(() => this.setState({ error: null }), 2500);
+        })
+        .catch(error => {
+          error.type = "warning";
+          this.setState({ error });
+        });
+    }
   };
 
   render() {
     const { route } = this.props;
-    const { drivers, loading, modalData, modalIsOpen, error } = this.state;
+    const {
+      drivers,
+      loading,
+      modalData,
+      modalIsOpen,
+      modalAction,
+      error
+    } = this.state;
     const {
       age,
       name,
@@ -114,13 +145,24 @@ class Drivers extends Component {
       shouldRender &&
       (!loading ? (
         <>
-          <h1 className="uk-heading-bullet text-xl md:text-xl">Manage Cars</h1>
+          <div className="flex justify-between items-center">
+            <h1 className="uk-heading-bullet text-xl md:text-xl">
+              Manage Drivers
+            </h1>
+            <button
+              onClick={() => this.openModal("create", {})}
+              className="uk-button uk-button-default rounded flex items-center"
+            >
+              <span className="mr-2" uk-icon="icon: plus"></span>Add new
+            </button>
+          </div>
           <table className="uk-table uk-table-middle uk-table-responsive uk-table-divider text-center md:text-left">
             <thead>
               <tr>
                 <th>Driver</th>
                 <th>Phone Number</th>
                 <th>Address</th>
+                <th>Gender</th>
                 <th>Rate</th>
                 <th>Centre</th>
                 <th>Availability</th>
@@ -134,7 +176,7 @@ class Drivers extends Component {
                       <td>
                         <div className="flex flex-col md:flex-row items-center">
                           <img
-                            className="w-1/3 md:w-16 mr-0 mb-4 md:mb-0 md:mr-4 rounded-full"
+                            className="w-32 h-32 md:w-12 md:h-12 mr-0 mb-4 md:mb-0 md:mr-4 rounded-full"
                             alt={driver.name}
                             src={driver.image}
                           />
@@ -150,11 +192,14 @@ class Drivers extends Component {
                       </td>
                       <td>{driver.phone.toUpperCase()}</td>
                       <td>{driver.address}</td>
+                      <td>{driver.gender}</td>
                       <td>&#8358;{numberWithCommas(driver.rate)}/hr</td>
-                      <td>{driver.centreId}</td>
+                      <td>{driver.branch}</td>
                       <td>
                         <span
-                          className={`uk-badge uk-padding-small ${
+                          title="Tap to toggle availability"
+                          onClick={() => this.toggleAvailability(driver)}
+                          className={`cursor-pointer uk-badge uk-padding-small ${
                             driver.isAvailable
                               ? "bg-teal-500"
                               : "bg-gray-300 text-gray-700 hover:text-gray-700"
@@ -165,7 +210,7 @@ class Drivers extends Component {
                       </td>
                       <td>
                         <button
-                          onClick={() => this.openModal(driver)}
+                          onClick={() => this.openModal("edit", driver)}
                           className="uk-button uk-button-default rounded"
                         >
                           Edit
@@ -184,8 +229,8 @@ class Drivers extends Component {
             >
               <div className="uk-width-xlarge@s flex flex-col justify-between h-screen md:h-auto ">
                 <div className="flex justify-between mb-4">
-                  <h1 className="uk-heading-bullet text-lg font-bold">
-                    Edit Driver
+                  <h1 className="uk-heading-bullet text-lg font-bold capitalize">
+                    {modalAction} Driver
                   </h1>
                   <span
                     className="cursor-pointer"
@@ -225,7 +270,8 @@ class Drivers extends Component {
                           className="uk-input"
                           id="age"
                           name="age"
-                          type="text"
+                          type="number"
+                          min="18"
                           onChange={this.onModalInputChange}
                           value={age}
                           placeholder="Age"
@@ -243,7 +289,7 @@ class Drivers extends Component {
                           id="rate"
                           name="rate"
                           type="number"
-                          min={18}
+                          min={50}
                           onChange={this.onModalInputChange}
                           value={rate}
                           placeholder="Rate"
@@ -263,7 +309,7 @@ class Drivers extends Component {
                           className="uk-input"
                           id="phone"
                           name="phone"
-                          type="text"
+                          type="tel"
                           onChange={this.onModalInputChange}
                           value={phone}
                           placeholder="Phone Number"
@@ -283,13 +329,13 @@ class Drivers extends Component {
                           className="uk-select"
                           id="gender"
                           name="gender"
-                          type="text"
                           onChange={this.onModalInputChange}
                           value={gender}
                           required={true}
                         >
-                          <option>Male</option>
-                          <option>Female</option>
+                          <option value="">Select Gender</option>
+                          <option value="Male">Male</option>
+                          <option value="Female">Female</option>
                         </select>
                       </div>
                     </div>
@@ -309,8 +355,29 @@ class Drivers extends Component {
                           value={branch}
                           required={true}
                         >
+                          <option value="">Select centre</option>
                           <option>Ikeja</option>
                         </select>
+                      </div>
+                    </div>
+                    <div className="uk-width-1-1@s">
+                      <label
+                        className="uk-form-label text-base"
+                        htmlFor="address"
+                      >
+                        Address
+                      </label>
+                      <div className="uk-form-controls">
+                        <input
+                          className="uk-input"
+                          id="address"
+                          name="address"
+                          type="text"
+                          value={address}
+                          onChange={this.onModalInputChange}
+                          placeholder="Address"
+                          required={true}
+                        />
                       </div>
                     </div>
                     <div className="uk-width-1-1@s">
@@ -338,13 +405,11 @@ class Drivers extends Component {
                       {error && <Alert {...error} />}
 
                       <button
-                        className={`uk-button uk-button-${
-                          isInvalid ? "disabled" : "default"
-                        } rounded`}
+                        className={`uk-button uk-button-default rounded`}
                         disabled={isInvalid}
                         type="submit"
                       >
-                        Update Driver
+                        {modalAction} Driver
                       </button>
                     </div>
                   </form>
