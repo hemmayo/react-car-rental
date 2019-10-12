@@ -60,7 +60,7 @@ class App extends Component {
           render={() => <PasswordChangePage {...this.props} />}
         />
         <Route
-          path={ROUTES.ADMIN.HOME}
+          path={ROUTES.ADMIN.ORDERS}
           render={() => <AdminHome {...this.props} />}
         />
       </Router>
