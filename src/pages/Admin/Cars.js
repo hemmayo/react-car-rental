@@ -116,7 +116,7 @@ class Cars extends Component {
       (!loading ? (
         <>
           <h1 className="uk-heading-bullet text-xl md:text-xl">Manage Cars</h1>
-          <table className="uk-table uk-table-middle uk-table-responsive uk-table-divider">
+          <table className="uk-table uk-table-middle uk-table-responsive uk-table-divider text-center md:text-left">
             <thead>
               <tr>
                 <th>Car</th>
@@ -136,14 +136,16 @@ class Cars extends Component {
                   return (
                     <tr key={car.uid}>
                       <td>
-                        <div className="flex">
+                        <div className="flex flex-col md:flex-row items-center md:items-start">
                           <img
-                            className="w-24 mr-4"
+                            className="w-1/2 md:w-24 mr-0 mb-4 md:mb-0 md:mr-4"
                             alt={carName}
                             src={car.image}
                           />
                           <div className="flex flex-col justify-center">
-                            <span>{carName}</span>
+                            <span className="text-lg md:text-base">
+                              {carName}
+                            </span>
                             <span className="text-sm uk-text-lead">
                               {car.noSeats} seats
                             </span>
@@ -184,7 +186,7 @@ class Cars extends Component {
               style={customStyles}
               contentLabel="Edit Car"
             >
-              <div className="uk-width-xlarge flex flex-col justify-between">
+              <div className="uk-width-xlarge@s flex flex-col justify-between h-screen md:h-auto ">
                 <div className="flex justify-between mb-4">
                   <h1 className="uk-heading-bullet text-lg font-bold">
                     Edit Car
