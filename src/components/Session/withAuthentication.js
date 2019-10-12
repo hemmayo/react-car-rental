@@ -12,13 +12,14 @@ const withAuthentication = Component => {
     };
 
     componentDidMount() {
-      this.listener = this.props.firebase.onAuthUserListener(authUser => {
-        if (authUser) {
+      this.listener = this.props.firebase.onAuthUserListener(
+        authUser => {
           this.setState({ authUser, loading: false });
-        } else {
+        },
+        () => {
           this.setState({ authUser: null, loading: false });
         }
-      });
+      );
     }
 
     componentWillUnmount() {

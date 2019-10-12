@@ -8,8 +8,7 @@ import { snapshotToArray } from "../../helpers";
 class Users extends Component {
   state = {
     users: null,
-    loading: true,
-    error: null
+    loading: true
   };
 
   componentDidMount() {
@@ -27,7 +26,7 @@ class Users extends Component {
 
   render() {
     const { route } = this.props;
-    const { users, loading, error } = this.state;
+    const { users, loading } = this.state;
     const shouldRender = route === ROUTES.ADMIN.USERS;
 
     return (
@@ -36,12 +35,6 @@ class Users extends Component {
         <>
           <div className="flex justify-between items-center">
             <h1 className="uk-heading-bullet text-xl md:text-xl">List Users</h1>
-            <button
-              onClick={() => this.openModal("create", {})}
-              className="uk-button uk-button-default rounded flex items-center"
-            >
-              <span className="mr-2" uk-icon="icon: plus"></span>Add new
-            </button>
           </div>
           <table className="uk-table uk-table-middle uk-table-responsive uk-table-divider text-center md:text-left">
             <thead>

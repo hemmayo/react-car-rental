@@ -1,9 +1,25 @@
 import React, { Component } from "react";
+import { withFirebase } from "../../../components/Firebase";
+import { snapshotToArray } from "../../../helpers";
 
-export default class Step2 extends Component {
+class Step2 extends Component {
   state = {
-    hideInput: true
+    hideInput: true,
+    centres: []
   };
+
+  componentDidMount() {
+    this.props.firebase.centres().on("value", snapshot => {
+      const centres = snapshotToArray(snapshot.val()).sort(
+        (a, b) => a.name - b.name
+      );
+      centres && this.setState({ centres });
+    });
+  }
+
+  componentWillUnmount() {
+    this.props.firebase.centres().off();
+  }
 
   render() {
     const {
@@ -14,7 +30,7 @@ export default class Step2 extends Component {
       editState
     } = this.props;
 
-    const { hideInput } = this.state;
+    const { hideInput, centres } = this.state;
 
     if (currentStep !== 2) {
       // Prop: The current step
@@ -86,21 +102,19 @@ export default class Step2 extends Component {
             </>
           ) : (
             <div className="my-2">
-              <span
-                className="uk-form-icon uk-form-icon-flip"
-                href="#"
-                uk-icon="icon: arrow-right"
-              ></span>
-              <input
-                className="uk-input uk-form-width-large uk-form-large rounded"
-                type="text"
+              <select
+                className="uk-select uk-form-large rounded"
                 value={dropoff}
                 name="dropoff"
-                placeholder="Type a location"
                 onChange={handleChange}
                 disabled={this.state.hideInput}
                 hidden={this.state.hideInput}
-              />
+              >
+                <option value="">Select centre</option>
+                {centres.map(centre => (
+                  <option key={centre.uid}>{centre.name}</option>
+                ))}
+              </select>
             </div>
           )}
         </div>
@@ -108,3 +122,5 @@ export default class Step2 extends Component {
     );
   }
 }
+
+export default withFirebase(Step2);

@@ -1,8 +1,28 @@
 import React, { Component } from "react";
+import { withFirebase } from "../../../components/Firebase";
+import { snapshotToArray } from "../../../helpers";
 
-export default class Step1 extends Component {
+class Step1 extends Component {
+  state = {
+    centres: []
+  };
+
+  componentDidMount() {
+    this.props.firebase.centres().on("value", snapshot => {
+      const centres = snapshotToArray(snapshot.val()).sort(
+        (a, b) => a.name - b.name
+      );
+      centres && this.setState({ centres });
+    });
+  }
+
+  componentWillUnmount() {
+    this.props.firebase.centres().off();
+  }
+
   render() {
     const { authUser, pickup, currentStep, handleChange } = this.props;
+    const { centres } = this.state;
 
     if (currentStep !== 1) {
       // Prop: The current step
@@ -51,20 +71,21 @@ export default class Step1 extends Component {
           <h2 className="text-xl">Choose a centre near you.</h2>
         </div>
         <div className="my-2 uk-inline w-full md:w-1/3">
-          <span
-            className="uk-form-icon uk-form-icon-flip"
-            uk-icon="icon: location"
-          ></span>
-          <input
-            className="uk-input uk-form-large rounded"
-            type="text"
+          <select
+            className="uk-select uk-form-large rounded"
             value={pickup}
             name="pickup"
-            placeholder="Type a location"
             onChange={handleChange}
-          />
+          >
+            <option value="">Select centre</option>
+            {centres.map(centre => (
+              <option key={centre.uid}>{centre.name}</option>
+            ))}
+          </select>
         </div>
       </React.Fragment>
     );
   }
 }
+
+export default withFirebase(Step1);
