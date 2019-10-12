@@ -8,6 +8,7 @@ import AdminNav from "./AdminNav";
 import Cars from "./Cars";
 import Drivers from "./Drivers";
 import Centres from "./Centres";
+import Users from "./Users";
 
 class AdminPage extends Component {
   render() {
@@ -21,6 +22,7 @@ class AdminPage extends Component {
           <Cars route={pathname} />
           <Drivers route={pathname} />
           <Centres route={pathname} />
+          <Users route={pathname} />
         </div>
       </Layout>
     );
