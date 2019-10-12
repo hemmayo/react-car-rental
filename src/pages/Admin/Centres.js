@@ -20,9 +20,9 @@ const customStyles = {
 
 Modal.setAppElement("#root");
 
-class Drivers extends Component {
+class Centres extends Component {
   state = {
-    drivers: null,
+    centres: null,
     loading: true,
     modalIsOpen: false,
     modalData: {},
@@ -32,21 +32,21 @@ class Drivers extends Component {
 
   componentDidMount() {
     const { firebase } = this.props;
-    firebase.drivers().on("value", snapshot => {
-      const drivers = snapshotToArray(snapshot.val());
-      this.setState({ drivers, loading: false });
+    firebase.centres().on("value", snapshot => {
+      const centres = snapshotToArray(snapshot.val()).reverse();
+      this.setState({ centres, loading: false });
     });
   }
 
   componentWillUnmount() {
     const { firebase } = this.props;
-    firebase.drivers().off();
+    firebase.centres().off();
   }
 
-  openModal = (action, driver) => {
+  openModal = (action, centre) => {
     this.setState({
       modalIsOpen: true,
-      modalData: driver,
+      modalData: centre,
       modalAction: action
     });
   };
@@ -70,29 +70,29 @@ class Drivers extends Component {
     });
   };
 
-  toggleAvailability = driver => {
-    driver.isAvailable = !driver.isAvailable;
-    this.props.firebase.driver(driver.uid).set(driver);
+  toggleAvailability = centre => {
+    centre.isAvailable = !centre.isAvailable;
+    this.props.firebase.centre(centre.uid).set(centre);
   };
 
   onUpdate = evt => {
     evt.preventDefault();
     const { firebase } = this.props;
     const { modalData, modalAction } = this.state;
-    const driver = {
+    const centre = {
       ...modalData,
       lastUpdated: moment({}).format()
     };
 
     if (modalAction === "edit") {
       firebase
-        .driver(driver.uid)
-        .set(driver)
+        .centre(centre.uid)
+        .set(centre)
         .then(() => {
           this.setState({
             error: {
               type: "success",
-              message: "Driver updated!"
+              message: "Centre updated!"
             }
           });
           setTimeout(() => this.setState({ error: null }), 2500);
@@ -103,13 +103,37 @@ class Drivers extends Component {
         });
     } else if (modalAction === "create") {
       firebase
-        .drivers()
-        .push(driver)
+        .centres()
+        .push(centre)
         .then(() => {
           this.setState({
             error: {
               type: "success",
-              message: "Driver added!"
+              message: "Centre added!"
+            }
+          });
+          setTimeout(() => {
+            this.closeModal();
+            this.setState({ error: null });
+          }, 2500);
+        })
+        .catch(error => {
+          error.type = "warning";
+          this.setState({ error });
+        });
+    }
+  };
+
+  onDelete = uid => {
+    if (window.confirm("Are you sure you want to delete this centre?")) {
+      this.props.firebase
+        .centre(uid)
+        .remove()
+        .then(() => {
+          this.setState({
+            error: {
+              type: "danger",
+              message: "Centre deleted!"
             }
           });
           setTimeout(() => {
@@ -127,26 +151,16 @@ class Drivers extends Component {
   render() {
     const { route } = this.props;
     const {
-      drivers,
+      centres,
       loading,
       modalData,
       modalIsOpen,
       modalAction,
       error
     } = this.state;
-    const {
-      age,
-      name,
-      image,
-      isAvailable,
-      branch,
-      gender,
-      rate,
-      address,
-      phone
-    } = modalData;
-    const isInvalid = !age || !name || !phone || !rate || !gender || !address;
-    const shouldRender = route === ROUTES.ADMIN.DRIVERS;
+    const { uid, name, location, phone, email, isAvailable } = modalData;
+    const isInvalid = !location || !name || !phone || !email;
+    const shouldRender = route === ROUTES.ADMIN.CENTRES;
 
     return (
       shouldRender &&
@@ -154,7 +168,7 @@ class Drivers extends Component {
         <>
           <div className="flex justify-between items-center">
             <h1 className="uk-heading-bullet text-xl md:text-xl">
-              Manage Drivers
+              Manage Centres
             </h1>
             <button
               onClick={() => this.openModal("create", {})}
@@ -166,58 +180,38 @@ class Drivers extends Component {
           <table className="uk-table uk-table-middle uk-table-responsive uk-table-divider text-center md:text-left">
             <thead>
               <tr>
-                <th>Driver</th>
-                <th>Phone Number</th>
-                <th>Address</th>
-                <th>Gender</th>
-                <th>Rate</th>
-                <th>Centre</th>
+                <th>Name</th>
+                <th>Location</th>
+                <th>Phone</th>
+                <th>Email</th>
                 <th>Availability</th>
               </tr>
             </thead>
             <tbody>
-              {drivers &&
-                drivers.map(driver => {
+              {centres &&
+                centres.map(centre => {
                   return (
-                    <tr key={driver.uid}>
-                      <td>
-                        <div className="flex flex-col md:flex-row items-center">
-                          <img
-                            className="w-32 h-32 md:w-12 md:h-12 mr-0 mb-4 md:mb-0 md:mr-4 rounded-full"
-                            alt={driver.name}
-                            src={driver.image}
-                          />
-                          <div className="flex flex-col justify-center">
-                            <span className="text-lg md:text-base">
-                              {driver.name}
-                            </span>
-                            <span className="text-sm uk-text-lead">
-                              {driver.age} years
-                            </span>
-                          </div>
-                        </div>
-                      </td>
-                      <td>{driver.phone}</td>
-                      <td>{driver.address}</td>
-                      <td>{driver.gender}</td>
-                      <td>&#8358;{numberWithCommas(driver.rate)}/hr</td>
-                      <td>{driver.branch}</td>
+                    <tr key={centre.uid}>
+                      <td>{centre.name}</td>
+                      <td>{centre.location}</td>
+                      <td>{centre.phone}</td>
+                      <td>{centre.email}</td>
                       <td>
                         <span
-                          title="Tap to toggle availability"
-                          onClick={() => this.toggleAvailability(driver)}
+                          title="Tap to toggle"
+                          onClick={() => this.toggleAvailability(centre)}
                           className={`cursor-pointer uk-badge uk-padding-small ${
-                            driver.isAvailable
+                            centre.isAvailable
                               ? "bg-teal-500"
                               : "bg-gray-300 text-gray-700 hover:text-gray-700"
                           }`}
                         >
-                          {driver.isAvailable ? "Available" : "Unavailable"}
+                          {centre.isAvailable ? "Active" : "Inactive"}
                         </span>
                       </td>
                       <td>
                         <button
-                          onClick={() => this.openModal("edit", driver)}
+                          onClick={() => this.openModal("edit", centre)}
                           className="uk-button uk-button-default rounded"
                         >
                           Edit
@@ -232,12 +226,12 @@ class Drivers extends Component {
               onAfterOpen={this.afterOpenModal}
               onRequestClose={this.closeModal}
               style={customStyles}
-              contentLabel="Edit Driver"
+              contentLabel="Centre Modal"
             >
               <div className="uk-width-xlarge@s flex flex-col justify-between h-screen md:h-auto ">
                 <div className="flex justify-between mb-4">
                   <h1 className="uk-heading-bullet text-lg font-bold capitalize">
-                    {modalAction} Driver
+                    {modalAction} Centre
                   </h1>
                   <span
                     className="cursor-pointer"
@@ -251,7 +245,7 @@ class Drivers extends Component {
                     className="uk-form-stacked uk-grid-small"
                     uk-grid=""
                   >
-                    <div className="uk-width-1-2@s">
+                    <div className="uk-width-1-1@s">
                       <label className="uk-form-label text-base" htmlFor="name">
                         Name
                       </label>
@@ -263,43 +257,27 @@ class Drivers extends Component {
                           type="text"
                           value={name}
                           onChange={this.onModalInputChange}
-                          placeholder="Driver name"
+                          placeholder="Centre name"
                           required={true}
                         />
                       </div>
                     </div>
-                    <div className="uk-width-1-4@s">
-                      <label className="uk-form-label text-base" htmlFor="age">
-                        Age
+                    <div className="uk-width-1-1@s">
+                      <label
+                        className="uk-form-label text-base"
+                        htmlFor="location"
+                      >
+                        Location
                       </label>
                       <div className="uk-form-controls">
                         <input
                           className="uk-input"
-                          id="age"
-                          name="age"
-                          type="number"
-                          min="18"
+                          id="location"
+                          name="location"
+                          type="text"
                           onChange={this.onModalInputChange}
-                          value={age}
-                          placeholder="Age"
-                          required={true}
-                        />
-                      </div>
-                    </div>
-                    <div className="uk-width-1-4@s">
-                      <label className="uk-form-label text-base" htmlFor="rate">
-                        Rate
-                      </label>
-                      <div className="uk-form-controls">
-                        <input
-                          className="uk-input"
-                          id="rate"
-                          name="rate"
-                          type="number"
-                          min={50}
-                          onChange={this.onModalInputChange}
-                          value={rate}
-                          placeholder="Rate"
+                          value={location}
+                          placeholder="Location"
                           required={true}
                         />
                       </div>
@@ -309,7 +287,7 @@ class Drivers extends Component {
                         className="uk-form-label text-base"
                         htmlFor="phone"
                       >
-                        Phone Number
+                        Phone
                       </label>
                       <div className="uk-form-controls">
                         <input
@@ -319,90 +297,27 @@ class Drivers extends Component {
                           type="tel"
                           onChange={this.onModalInputChange}
                           value={phone}
-                          placeholder="Phone Number"
+                          placeholder="Phone number"
                           required={true}
                         />
                       </div>
                     </div>
-                    <div className="uk-width-1-4@s">
+                    <div className="uk-width-1-2@s">
                       <label
                         className="uk-form-label text-base"
-                        htmlFor="gender"
+                        htmlFor="email"
                       >
-                        Gender
-                      </label>
-                      <div className="uk-form-controls">
-                        <select
-                          className="uk-select"
-                          id="gender"
-                          name="gender"
-                          onChange={this.onModalInputChange}
-                          value={gender}
-                          required={true}
-                        >
-                          <option value="">Select Gender</option>
-                          <option value="Male">Male</option>
-                          <option value="Female">Female</option>
-                        </select>
-                      </div>
-                    </div>
-                    <div className="uk-width-1-4@s">
-                      <label
-                        className="uk-form-label text-base"
-                        htmlFor="branch"
-                      >
-                        Centre
-                      </label>
-                      <div className="uk-form-controls">
-                        <select
-                          className="uk-select"
-                          id="branch"
-                          name="branch"
-                          onChange={this.onModalInputChange}
-                          value={branch}
-                          required={true}
-                        >
-                          <option value="">Select centre</option>
-                          <option>Ikeja</option>
-                        </select>
-                      </div>
-                    </div>
-                    <div className="uk-width-1-1@s">
-                      <label
-                        className="uk-form-label text-base"
-                        htmlFor="address"
-                      >
-                        Address
+                        Email Address
                       </label>
                       <div className="uk-form-controls">
                         <input
                           className="uk-input"
-                          id="address"
-                          name="address"
-                          type="text"
-                          value={address}
+                          id="email"
+                          name="email"
+                          type="email"
                           onChange={this.onModalInputChange}
-                          placeholder="Address"
-                          required={true}
-                        />
-                      </div>
-                    </div>
-                    <div className="uk-width-1-1@s">
-                      <label
-                        className="uk-form-label text-base"
-                        htmlFor="image"
-                      >
-                        Image URL
-                      </label>
-                      <div className="uk-form-controls">
-                        <input
-                          className="uk-input"
-                          id="image"
-                          name="image"
-                          type="url"
-                          value={image}
-                          onChange={this.onModalInputChange}
-                          placeholder="Image URL"
+                          value={email}
+                          placeholder="Email Address"
                           required={true}
                         />
                       </div>
@@ -412,11 +327,18 @@ class Drivers extends Component {
                       {error && <Alert {...error} />}
 
                       <button
-                        className={`uk-button uk-button-default rounded`}
+                        className={`uk-button uk-button-default rounded mr-2`}
                         disabled={isInvalid}
                         type="submit"
                       >
-                        {modalAction} Driver
+                        {modalAction} Centre
+                      </button>
+                      <button
+                        onClick={() => this.onDelete(uid)}
+                        className="uk-button uk-button-danger rounded"
+                        type="button"
+                      >
+                        Delete
                       </button>
                     </div>
                   </form>
@@ -433,4 +355,4 @@ class Drivers extends Component {
   }
 }
 
-export default withFirebase(Drivers);
+export default withFirebase(Centres);

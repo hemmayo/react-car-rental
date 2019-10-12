@@ -107,7 +107,10 @@ class Cars extends Component {
               message: "Car added!"
             }
           });
-          setTimeout(() => this.setState({ error: null }), 2500);
+          setTimeout(() => {
+            this.closeModal();
+            this.setState({ error: null });
+          }, 2500);
         })
         .catch(error => {
           error.type = "warning";

@@ -7,6 +7,7 @@ import Layout from "../../components/Layout";
 import AdminNav from "./AdminNav";
 import Cars from "./Cars";
 import Drivers from "./Drivers";
+import Centres from "./Centres";
 
 class AdminPage extends Component {
   render() {
@@ -19,6 +20,7 @@ class AdminPage extends Component {
         <div className="py-6">
           <Cars route={pathname} />
           <Drivers route={pathname} />
+          <Centres route={pathname} />
         </div>
       </Layout>
     );
