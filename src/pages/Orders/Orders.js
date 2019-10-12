@@ -181,7 +181,7 @@ class Orders extends Component {
                       close={this.onPaymentClose}
                       embed={false}
                       reference={this.getReference()}
-                      email={this.props.me.email}
+                      email={this.props.authUser.email}
                       amount={order.price * 100}
                       paystackkey={this.state.key}
                       tag="button"

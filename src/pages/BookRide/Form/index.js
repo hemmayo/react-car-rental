@@ -248,7 +248,7 @@ class BookRideBase extends Component {
             currentStep={this.state.currentStep}
             handleChange={this.handleChange}
             pickup={this.state.pickup}
-            me={this.props.me}
+            authUser={this.props.authUser}
           />
           <Step2
             currentStep={this.state.currentStep}

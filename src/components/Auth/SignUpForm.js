@@ -17,6 +17,7 @@ class SignUpForm extends Component {
   handleSubmit = evt => {
     evt.preventDefault();
     const { email, password, username } = this.state;
+    const roles = {};
 
     this.setState({ error: null });
 
@@ -25,7 +26,8 @@ class SignUpForm extends Component {
       .then(authUser => {
         return this.props.firebase.user(authUser.user.uid).set({
           username,
-          email
+          email,
+          roles
         });
       })
       .then(() => {

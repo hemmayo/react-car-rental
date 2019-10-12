@@ -12,3 +12,7 @@ export const SIGNIN = "/signin";
 export const SIGNUP = "/signup";
 export const SIGNOUT = "/signout";
 export const SETTINGS = "/settings";
+
+export const ADMIN = {
+  HOME: "/admin"
+};

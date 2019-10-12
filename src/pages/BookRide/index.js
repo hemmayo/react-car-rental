@@ -8,12 +8,12 @@ class BookRide extends Component {
   state = {};
 
   render() {
-    const { me } = this.props;
+    const { authUser } = this.props;
 
     return (
       <Layout>
         <div className="w-full">
-          <BookRideBase me={me} />
+          <BookRideBase authUser={authUser} />
         </div>
       </Layout>
     );

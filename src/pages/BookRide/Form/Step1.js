@@ -2,7 +2,7 @@ import React, { Component } from "react";
 
 export default class Step1 extends Component {
   render() {
-    const { me, pickup, currentStep, handleChange } = this.props;
+    const { authUser, pickup, currentStep, handleChange } = this.props;
 
     if (currentStep !== 1) {
       // Prop: The current step
@@ -46,7 +46,7 @@ export default class Step1 extends Component {
         </svg>
         <div className="my-4">
           <h1 className="text-3xl md:text-3xl font-bold mb-2">
-            Hi, {me.username}!
+            Hi, {authUser.username}!
           </h1>
           <h2 className="text-xl">What's your pick-up location?</h2>
         </div>

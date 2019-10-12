@@ -14,12 +14,16 @@ import ProfilePage from "../pages/Profile";
 import OrdersPage from "../pages/Orders";
 import PasswordChangePage from "../pages/PasswordChange";
 
+import AdminHome from "../pages/Admin";
+
 import { BrowserRouter as Router, Route } from "react-router-dom";
 import * as ROUTES from "../constants/routes";
 import { withAuthentication } from "./Session";
 
 class App extends Component {
   render() {
+    console.log(this.props);
+
     return (
       <Router>
         <Route exact path={ROUTES.LANDING} component={LandingPage} />
@@ -29,33 +33,37 @@ class App extends Component {
         <Route path={ROUTES.PASSWORDFORGET} component={PasswordForgetPage} />
         <Route
           path={ROUTES.DASHBOARD}
-          render={props => <DashboardPage {...props} {...this.props} />}
+          render={props => <DashboardPage {...this.props} />}
         />
         <Route path={ROUTES.ABOUT} component={AboutPage} />
         <Route path={ROUTES.CONTACT} component={ContactPage} />
         <Route
           path={ROUTES.HIREDRIVER}
-          render={props => <HireDriverPage {...props} {...this.props} />}
+          render={() => <HireDriverPage {...this.props} />}
         />
         <Route
           path={ROUTES.BOOKRIDE}
-          render={props => <BookRidePage {...props} {...this.props} />}
+          render={() => <BookRidePage {...this.props} />}
         />
         <Route
           path={ROUTES.ORDERS}
-          render={props => <OrdersPage {...props} {...this.props} />}
+          render={() => <OrdersPage {...this.props} />}
         />
         <Route
           path={ROUTES.SETTINGS}
-          render={props => <ProfilePage {...props} {...this.props} />}
+          render={() => <ProfilePage {...this.props} />}
         />
         <Route
           path={ROUTES.PROFILE}
-          render={props => <ProfilePage {...props} {...this.props} />}
+          render={() => <ProfilePage {...this.props} />}
         />
         <Route
           path={ROUTES.PASSWORDCHANGE}
-          render={props => <PasswordChangePage {...props} {...this.props} />}
+          render={() => <PasswordChangePage {...this.props} />}
+        />
+        <Route
+          path={ROUTES.ADMIN.HOME}
+          render={() => <AdminHome {...this.props} />}
         />
       </Router>
     );

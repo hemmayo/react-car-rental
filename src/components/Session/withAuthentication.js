@@ -8,19 +8,13 @@ const withAuthentication = Component => {
   class WithAuthentication extends React.Component {
     state = {
       authUser: null,
-      me: null,
       loading: true
     };
 
     componentDidMount() {
-      this.listener = this.props.firebase.auth.onAuthStateChanged(authUser => {
+      this.listener = this.props.firebase.onAuthUserListener(authUser => {
         if (authUser) {
-          this.setState({ authUser });
-          this.props.firebase
-            .user(this.state.authUser.uid)
-            .on("value", snapshot => {
-              this.setState({ authUser, me: snapshot.val(), loading: false });
-            });
+          this.setState({ authUser, loading: false });
         } else {
           this.setState({ authUser: null, loading: false });
         }
@@ -33,11 +27,11 @@ const withAuthentication = Component => {
     }
 
     render() {
-      const { loading } = this.state;
+      const { loading, authUser } = this.state;
       return (
-        <AuthUserContext.Provider value={this.state.authUser}>
+        <AuthUserContext.Provider value={authUser}>
           {!loading ? (
-            <Component me={this.state.me} {...this.props} />
+            <Component authUser={authUser} {...this.props} />
           ) : (
             <Loading />
           )}
