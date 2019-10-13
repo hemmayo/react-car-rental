@@ -26,10 +26,12 @@ export default function Landing() {
           </div>
         </div>
         <div className="uk-section uk-section-small">
-          <div class="uk-child-width-1-3@s uk-margin" uk-grid="">
+          <div className="uk-child-width-1-3@s uk-margin" uk-grid="">
             <div>
-              <div class="uk-card uk-card-default uk-card-body shadow rounded-lg ">
-                <h3 class="text-xl mb-2 font-semibold">Easy Online Booking</h3>
+              <div className="uk-card uk-card-default uk-card-body shadow rounded-lg ">
+                <h3 className="text-xl mb-2 font-semibold">
+                  Easy Online Booking
+                </h3>
                 <p>
                   Lorem ipsum color sit amet, consectetur adipiscing elit, sed
                   do eiusmod tempor incididunt ut labore et dolore magna aliqua.
@@ -37,8 +39,8 @@ export default function Landing() {
               </div>
             </div>
             <div>
-              <div class="uk-card uk-card-default uk-card-body shadow rounded-lg ">
-                <h3 class="text-xl mb-2 font-semibold">
+              <div className="uk-card uk-card-default uk-card-body shadow rounded-lg ">
+                <h3 className="text-xl mb-2 font-semibold">
                   Variety of Car Brands
                 </h3>
                 <p>
@@ -48,8 +50,8 @@ export default function Landing() {
               </div>
             </div>
             <div>
-              <div class="uk-card uk-card-default uk-card-body shadow rounded-lg ">
-                <h3 class="text-xl mb-2 font-semibold">Online Payment</h3>
+              <div className="uk-card uk-card-default uk-card-body shadow rounded-lg ">
+                <h3 className="text-xl mb-2 font-semibold">Online Payment</h3>
                 <p>
                   Lorem ipsum color sit amet, consectetur adipiscing elit, sed
                   do eiusmod tempor incididunt ut labore et dolore magna aliqua.

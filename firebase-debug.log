@@ -1,0 +1,158 @@
+[debug] [2019-10-13T23:32:07.658Z] ----------------------------------------------------------------------
+[debug] [2019-10-13T23:32:07.664Z] Command:       /usr/local/bin/node /usr/local/bin/firebase deploy
+[debug] [2019-10-13T23:32:07.664Z] CLI Version:   7.5.0
+[debug] [2019-10-13T23:32:07.664Z] Platform:      darwin
+[debug] [2019-10-13T23:32:07.665Z] Node Version:  v12.6.0
+[debug] [2019-10-13T23:32:07.675Z] Time:          Mon Oct 14 2019 00:32:07 GMT+0100 (West Africa Standard Time)
+[debug] [2019-10-13T23:32:07.676Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2019-10-13T23:32:07.695Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2019-10-13T23:32:07.695Z] > authorizing via signed-in user
+[debug] [2019-10-13T23:32:07.695Z] [iam] checking project car-rental-428b2 for permissions ["cloudfunctions.functions.create","cloudfunctions.functions.delete","cloudfunctions.functions.get","cloudfunctions.functions.list","cloudfunctions.functions.update","cloudfunctions.operations.get","firebase.projects.get","firebasedatabase.instances.update","firebasehosting.sites.update"]
+[debug] [2019-10-13T23:32:07.703Z] > refreshing access token with scopes: ["email","https://www.googleapis.com/auth/cloud-platform","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","openid"]
+[debug] [2019-10-13T23:32:07.704Z] >>> HTTP REQUEST POST https://www.googleapis.com/oauth2/v3/token  
+ <request body omitted>
+[debug] [2019-10-13T23:32:08.499Z] <<< HTTP RESPONSE 200
+[debug] [2019-10-13T23:32:08.548Z] >>> HTTP REQUEST POST https://cloudresourcemanager.googleapis.com/v1/projects/car-rental-428b2:testIamPermissions  
+
+[debug] [2019-10-13T23:32:10.580Z] <<< HTTP RESPONSE 200
+[debug] [2019-10-13T23:32:10.583Z] >>> HTTP REQUEST GET https://firebase.googleapis.com/v1beta1/projects/car-rental-428b2  
+ 
+[debug] [2019-10-13T23:32:11.695Z] <<< HTTP RESPONSE 200
+[info] 
+[info] === Deploying to 'car-rental-428b2'...
+[info] 
+[info] i  deploying database, functions, hosting
+[info] Running command: npm --prefix "$RESOURCE_DIR" run lint
+[info] ✔  functions: Finished running predeploy script.
+[info] i  database: checking rules syntax...
+[debug] [2019-10-13T23:32:17.224Z] >>> HTTP REQUEST PUT https://car-rental-428b2.firebaseio.com/.settings/rules.json?dryRun=true  
+ {
+  /* Visit https://firebase.google.com/docs/database/security to learn more about security rules. */
+  "rules": {
+    ".read": true,
+    ".write": true
+  }
+}
+
+[debug] [2019-10-13T23:32:19.066Z] <<< HTTP RESPONSE 200
+[info] ✔  database: rules syntax for database car-rental-428b2 is valid
+[debug] [2019-10-13T23:32:19.068Z] > [functions] package.json contents: {
+  "name": "functions",
+  "description": "Cloud Functions for Firebase",
+  "scripts": {
+    "lint": "eslint .",
+    "serve": "firebase serve --only functions",
+    "shell": "firebase functions:shell",
+    "start": "npm run shell",
+    "deploy": "firebase deploy --only functions",
+    "logs": "firebase functions:log"
+  },
+  "engines": {
+    "node": "8"
+  },
+  "dependencies": {
+    "firebase-admin": "^8.0.0",
+    "firebase-functions": "^3.1.0"
+  },
+  "devDependencies": {
+    "eslint": "^5.12.0",
+    "eslint-plugin-promise": "^4.0.1",
+    "firebase-functions-test": "^0.1.6"
+  },
+  "private": true
+}
+[info] i  functions: ensuring necessary APIs are enabled...
+[debug] [2019-10-13T23:32:19.069Z] >>> HTTP REQUEST GET https://serviceusage.googleapis.com/v1/projects/car-rental-428b2/services/cloudfunctions.googleapis.com  
+ 
+[debug] [2019-10-13T23:32:19.070Z] >>> HTTP REQUEST GET https://serviceusage.googleapis.com/v1/projects/car-rental-428b2/services/runtimeconfig.googleapis.com  
+ 
+[debug] [2019-10-13T23:32:21.655Z] <<< HTTP RESPONSE 200
+[debug] [2019-10-13T23:32:23.086Z] <<< HTTP RESPONSE 200
+[info] ✔  functions: all necessary APIs are enabled
+[debug] [2019-10-13T23:32:23.088Z] >>> HTTP REQUEST GET https://firebase.googleapis.com/v1beta1/projects/car-rental-428b2/adminSdkConfig  
+ 
+[debug] [2019-10-13T23:32:23.879Z] <<< HTTP RESPONSE 200
+[debug] [2019-10-13T23:32:23.881Z] >>> HTTP REQUEST POST https://firebasehosting.googleapis.com/v1beta1/sites/car-rental-428b2/versions  
+
+[debug] [2019-10-13T23:32:27.303Z] <<< HTTP RESPONSE 200
+[info] i  functions: preparing functions directory for uploading...
+[debug] [2019-10-13T23:32:27.306Z] >>> HTTP REQUEST GET https://runtimeconfig.googleapis.com/v1beta1/projects/car-rental-428b2/configs  
+ 
+[debug] [2019-10-13T23:32:28.290Z] <<< HTTP RESPONSE 200
+[info] i  functions: packaged functions (36.78 KB) for uploading
+[debug] [2019-10-13T23:32:28.512Z] >>> HTTP REQUEST POST https://cloudfunctions.googleapis.com/v1/projects/car-rental-428b2/locations/us-central1/functions:generateUploadUrl  
+ 
+[debug] [2019-10-13T23:32:30.435Z] <<< HTTP RESPONSE 200
+[debug] [2019-10-13T23:32:30.436Z] >>> HTTP REQUEST PUT https://storage.googleapis.com/gcf-upload-us-central1-61a0a527-0383-445f-a9a7-66a52c995ec6/a53608dd-778e-48e6-a64f-0c15f8171169.zip?GoogleAccessId=service-613201457740@gcf-admin-robot.iam.gserviceaccount.com&Expires=1571011349&Signature=DQi4zblUg8QF2A8%2Bz720xz7OLewQoecC1QXu3UpQ%2F5xKe1sVVb%2BYKwfmO23iBKJQiLbAicVvu26FB3Mv7bRmymdMPa1HnilxY1I8o5xYO3%2BvIMqgAMwKr1vw%2B4%2BVUT2lbS4JpV4q9k1k%2BZMGf5K0wBvooM6B6lQ%2BNZP21oge1WCXiAEEoZOZYT%2BpDlDgEKEJjhaHV0IwMrtoXvXMCHvYhpfniXvkXEoD%2BdrDWYORl59%2BJKepidhi6%2BIuxTpJQxGsWGKW9XxpSCGPp6eu5WBYyrdIIbOKpJCG9UWVwUbtvZ1jkR4oGwNnWBuzRwCN8ZXPhPA8lh%2BgzG1CN6HY566A0A%3D%3D  
+ <request body omitted>
+[debug] [2019-10-13T23:32:32.275Z] <<< HTTP RESPONSE 200
+[info] ✔  functions: functions folder uploaded successfully
+[info] i  hosting[car-rental-428b2]: beginning deploy...
+[info] i  hosting[car-rental-428b2]: found 20 files in build
+[debug] [2019-10-13T23:32:32.289Z] [hosting] hash cache [YnVpbGQ] load error: lines is not defined
+[debug] [2019-10-13T23:32:33.178Z] [hosting] hash cache [YnVpbGQ] stored for 20 files
+[debug] [2019-10-13T23:32:33.179Z] [hosting][hash queue][FINAL]
+[debug] [2019-10-13T23:32:33.179Z] >>> HTTP REQUEST POST https://firebasehosting.googleapis.com/v1beta1/sites/car-rental-428b2/versions/e8bad4537fd72f61:populateFiles  
+ <request body omitted>
+[debug] [2019-10-13T23:32:35.791Z] <<< HTTP RESPONSE 200
+[debug] [2019-10-13T23:32:35.798Z] [hosting][populate queue][FINAL]
+[debug] [2019-10-13T23:32:35.799Z] [hosting] uploads queued: 8
+[debug] [2019-10-13T23:32:49.991Z] [hosting][upload queue][FINAL]
+[info] ✔  hosting[car-rental-428b2]: file upload complete
+[debug] [2019-10-13T23:32:49.992Z] [hosting] deploy completed after 17716ms
+[info] i  database: releasing rules...
+[debug] [2019-10-13T23:32:50.643Z] >>> HTTP REQUEST PUT https://car-rental-428b2.firebaseio.com/.settings/rules.json  
+ {
+  /* Visit https://firebase.google.com/docs/database/security to learn more about security rules. */
+  "rules": {
+    ".read": true,
+    ".write": true
+  }
+}
+
+[debug] [2019-10-13T23:32:52.250Z] <<< HTTP RESPONSE 200
+[info] ✔  database: rules for database car-rental-428b2 released successfully
+[debug] [2019-10-13T23:32:52.253Z] >>> HTTP REQUEST GET https://cloudfunctions.googleapis.com/v1/projects/car-rental-428b2/locations/-/functions  
+ 
+[debug] [2019-10-13T23:32:53.253Z] <<< HTTP RESPONSE 200
+[info] i  functions: updating Node.js 8 function driver_sensor_update(us-central1)...
+[debug] [2019-10-13T23:32:53.255Z] Trigger is:  {"httpsTrigger":{}}
+[info] i  functions: updating Node.js 8 function car_sensor_update(us-central1)...
+[debug] [2019-10-13T23:32:53.256Z] Trigger is:  {"httpsTrigger":{}}
+[debug] [2019-10-13T23:32:53.257Z] >>> HTTP REQUEST GET https://serviceusage.googleapis.com/v1/projects/car-rental-428b2/services/cloudscheduler.googleapis.com  
+ 
+[debug] [2019-10-13T23:32:55.085Z] <<< HTTP RESPONSE 200
+[debug] [2019-10-13T23:32:55.087Z] >>> HTTP REQUEST PATCH https://cloudfunctions.googleapis.com/v1/projects/car-rental-428b2/locations/us-central1/functions/driver_sensor_update {"updateMask":"sourceUploadUrl,name,labels,runtime,httpsTrigger"} 
+
+[debug] [2019-10-13T23:32:55.088Z] >>> HTTP REQUEST PATCH https://cloudfunctions.googleapis.com/v1/projects/car-rental-428b2/locations/us-central1/functions/car_sensor_update {"updateMask":"sourceUploadUrl,name,labels,runtime,httpsTrigger"} 
+
+[debug] [2019-10-13T23:32:56.239Z] <<< HTTP RESPONSE 200
+[debug] [2019-10-13T23:32:56.241Z] <<< HTTP RESPONSE 200
+[debug] [2019-10-13T23:32:56.242Z] >>> HTTP REQUEST GET https://cloudfunctions.googleapis.com/v1/projects/car-rental-428b2/locations/-/functions  
+ 
+[debug] [2019-10-13T23:32:57.162Z] <<< HTTP RESPONSE 200
+[debug] [2019-10-13T23:32:57.163Z] >>> HTTP REQUEST GET https://cloudfunctions.googleapis.com/v1/operations/Y2FyLXJlbnRhbC00MjhiMi91cy1jZW50cmFsMS9kcml2ZXJfc2Vuc29yX3VwZGF0ZS9kWTdyMG0xd1J4bw  
+ 
+[debug] [2019-10-13T23:32:57.163Z] >>> HTTP REQUEST GET https://cloudfunctions.googleapis.com/v1/operations/Y2FyLXJlbnRhbC00MjhiMi91cy1jZW50cmFsMS9jYXJfc2Vuc29yX3VwZGF0ZS9iN3RsNWhWRkk1bw  
+ 
+[debug] [2019-10-13T23:32:58.082Z] <<< HTTP RESPONSE 200
+[debug] [2019-10-13T23:32:58.083Z] <<< HTTP RESPONSE 200
+[debug] [2019-10-13T23:33:00.085Z] >>> HTTP REQUEST GET https://cloudfunctions.googleapis.com/v1/operations/Y2FyLXJlbnRhbC00MjhiMi91cy1jZW50cmFsMS9kcml2ZXJfc2Vuc29yX3VwZGF0ZS9kWTdyMG0xd1J4bw  
+ 
+[debug] [2019-10-13T23:33:00.086Z] >>> HTTP REQUEST GET https://cloudfunctions.googleapis.com/v1/operations/Y2FyLXJlbnRhbC00MjhiMi91cy1jZW50cmFsMS9jYXJfc2Vuc29yX3VwZGF0ZS9iN3RsNWhWRkk1bw  
+ 
+[debug] [2019-10-13T23:33:00.847Z] <<< HTTP RESPONSE 200
+[debug] [2019-10-13T23:33:00.848Z] <<< HTTP RESPONSE 200
+[debug] [2019-10-13T23:33:02.852Z] >>> HTTP REQUEST GET https://cloudfunctions.googleapis.com/v1/operations/Y2FyLXJlbnRhbC00MjhiMi91cy1jZW50cmFsMS9kcml2ZXJfc2Vuc29yX3VwZGF0ZS9kWTdyMG0xd1J4bw  
+ 
+[debug] [2019-10-13T23:33:02.852Z] >>> HTTP REQUEST GET https://cloudfunctions.googleapis.com/v1/operations/Y2FyLXJlbnRhbC00MjhiMi91cy1jZW50cmFsMS9jYXJfc2Vuc29yX3VwZGF0ZS9iN3RsNWhWRkk1bw  
+ 
+[debug] [2019-10-13T23:33:03.922Z] <<< HTTP RESPONSE 200
+[debug] [2019-10-13T23:33:03.923Z] <<< HTTP RESPONSE 200
+[debug] [2019-10-13T23:33:05.925Z] >>> HTTP REQUEST GET https://cloudfunctions.googleapis.com/v1/operations/Y2FyLXJlbnRhbC00MjhiMi91cy1jZW50cmFsMS9kcml2ZXJfc2Vuc29yX3VwZGF0ZS9kWTdyMG0xd1J4bw  
+ 
+[debug] [2019-10-13T23:33:05.926Z] >>> HTTP REQUEST GET https://cloudfunctions.googleapis.com/v1/operations/Y2FyLXJlbnRhbC00MjhiMi91cy1jZW50cmFsMS9jYXJfc2Vuc29yX3VwZGF0ZS9iN3RsNWhWRkk1bw  
+ 
+[debug] [2019-10-13T23:33:06.604Z] <<< HTTP RESPONSE 200
+[debug] [2019-10-13T23:33:06.608Z] <<< HTTP RESPONSE 200
