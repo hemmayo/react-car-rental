@@ -6,6 +6,7 @@ import * as ROUTES from "../../constants/routes";
 import { withFirebase } from "../../components/Firebase";
 import { snapshotToArray, numberWithCommas } from "../../helpers";
 import Alert from "../../components/Alert";
+import Map from "./Map";
 
 const customStyles = {
   content: {
@@ -131,6 +132,7 @@ class Orders extends Component {
       pickup,
       pickupDate,
       price,
+      sensorData,
       status,
       uid,
       user
@@ -278,7 +280,7 @@ class Orders extends Component {
                     onClick={this.closeModal}
                   ></span>
                 </div>
-                <div className="flex flex-1">
+                <div className="flex flex-col flex-1">
                   <table className="uk-table uk-table-small uk-table-responsive">
                     <thead>
                       <tr>
@@ -289,7 +291,6 @@ class Orders extends Component {
                     </thead>
                     <tbody>
                       <tr>
-                        {" "}
                         <td>
                           <div className="flex flex-col">
                             {pickup}
@@ -321,6 +322,16 @@ class Orders extends Component {
                       </tr>
                     </tbody>
                   </table>
+                  <Map
+                    uid={{ car: car && car.uid, driver: driver && driver.uid }}
+                    type={
+                      car && car.uid
+                        ? "car"
+                        : driver && driver.uid
+                        ? "driver"
+                        : null
+                    }
+                  />
                 </div>
               </div>
             </Modal>
