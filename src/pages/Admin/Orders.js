@@ -5,7 +5,6 @@ import moment from "moment";
 import * as ROUTES from "../../constants/routes";
 import { withFirebase } from "../../components/Firebase";
 import { snapshotToArray, numberWithCommas } from "../../helpers";
-import Alert from "../../components/Alert";
 import Map from "./Map";
 
 const customStyles = {
@@ -115,27 +114,15 @@ class Orders extends Component {
 
   render() {
     const { route } = this.props;
+    const { orders, loading, modalData, modalIsOpen, modalAction } = this.state;
     const {
-      orders,
-      loading,
-      modalData,
-      modalIsOpen,
-      modalAction,
-      error
-    } = this.state;
-    const {
-      age,
       car,
       driver,
       dropoff,
       dropoffDate,
       pickup,
       pickupDate,
-      price,
-      sensorData,
-      status,
-      uid,
-      user
+      status
     } = modalData;
     const shouldRender = route === ROUTES.ADMIN.ORDERS;
 
@@ -324,13 +311,6 @@ class Orders extends Component {
                   </table>
                   <Map
                     uid={{ car: car && car.uid, driver: driver && driver.uid }}
-                    type={
-                      car && car.uid
-                        ? "car"
-                        : driver && driver.uid
-                        ? "driver"
-                        : null
-                    }
                   />
                 </div>
               </div>

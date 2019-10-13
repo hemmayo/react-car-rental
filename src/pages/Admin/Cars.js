@@ -134,7 +134,6 @@ class Cars extends Component {
       vehicleNumber,
       year,
       manufacturer,
-      isAvailable,
       image,
       transmissionMode,
       rate,

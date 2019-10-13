@@ -4,7 +4,7 @@ import moment from "moment";
 
 import * as ROUTES from "../../constants/routes";
 import { withFirebase } from "../../components/Firebase";
-import { snapshotToArray, numberWithCommas } from "../../helpers";
+import { snapshotToArray } from "../../helpers";
 import Alert from "../../components/Alert";
 
 const customStyles = {
@@ -158,7 +158,7 @@ class Centres extends Component {
       modalAction,
       error
     } = this.state;
-    const { uid, name, location, phone, email, isAvailable } = modalData;
+    const { uid, name, location, phone, email } = modalData;
     const isInvalid = !location || !name || !phone || !email;
     const shouldRender = route === ROUTES.ADMIN.CENTRES;
 

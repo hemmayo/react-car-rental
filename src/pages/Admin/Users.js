@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import Modal from "react-modal";
 
 import * as ROUTES from "../../constants/routes";
 import { withFirebase } from "../../components/Firebase";

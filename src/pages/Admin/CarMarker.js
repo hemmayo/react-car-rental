@@ -37,7 +37,7 @@ export default class CarMarker extends Component {
     const { address } = this.state;
 
     const style = {
-      transform: `rotate(${angle - 90}deg)`
+      transform: `rotate(${(angle || 0) - 90}deg)`
     };
 
     style.filter = !(lat && lng) && "grayscale(1)";

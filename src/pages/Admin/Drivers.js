@@ -138,7 +138,6 @@ class Drivers extends Component {
       age,
       name,
       image,
-      isAvailable,
       branch,
       gender,
       rate,

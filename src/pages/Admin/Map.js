@@ -15,17 +15,24 @@ class SimpleMap extends Component {
   };
 
   state = {
-    car: null,
-    driver: null
+    sensorData: undefined
   };
 
   componentDidMount() {
-    const { firebase, uid, type } = this.props;
+    const { firebase, uid } = this.props;
+
     firebase.car(uid.car || 0).on("value", snapshot => {
-      this.setState({ car: snapshot.val() });
-    });
-    firebase.driver(uid.driver || 0).on("value", snapshot => {
-      this.setState({ driver: snapshot.val() });
+      const car = snapshot.val();
+      if (car && car.sensorData) {
+        this.setState({ sensorData: car.sensorData });
+      } else {
+        firebase.driver(uid.driver || 0).on("value", snapshot => {
+          const driver = snapshot.val();
+          driver &&
+            driver.sensorData &&
+            this.setState({ sensorData: driver.sensorData });
+        });
+      }
     });
   }
 
@@ -39,10 +46,13 @@ class SimpleMap extends Component {
   };
 
   render() {
-    const { car, driver } = this.state;
+    const { sensorData } = this.state;
 
-    const sensorData =
-      (car && car.sensorData) || (driver && driver.sensorData) || null;
+    if (sensorData) {
+      sensorData.lat = Number(sensorData.lat);
+      sensorData.lng = Number(sensorData.lng);
+      sensorData.angle = Number(sensorData.angle);
+    }
 
     return sensorData ? (
       // Important! Always set the container height explicitly
