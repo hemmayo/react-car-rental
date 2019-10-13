@@ -9,6 +9,7 @@ import Cars from "./Cars";
 import Drivers from "./Drivers";
 import Centres from "./Centres";
 import Users from "./Users";
+import Orders from "./Orders";
 
 class AdminPage extends Component {
   render() {
@@ -23,6 +24,7 @@ class AdminPage extends Component {
           <Drivers route={pathname} />
           <Centres route={pathname} />
           <Users route={pathname} />
+          <Orders route={pathname} />
         </div>
       </Layout>
     );

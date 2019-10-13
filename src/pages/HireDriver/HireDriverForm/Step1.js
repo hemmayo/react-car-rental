@@ -9,9 +9,9 @@ class Step1 extends Component {
 
   componentDidMount() {
     this.props.firebase.centres().on("value", snapshot => {
-      const centres = snapshotToArray(snapshot.val()).sort(
-        (a, b) => a.name - b.name
-      );
+      const centres = snapshotToArray(snapshot.val())
+        .sort((a, b) => a.name - b.name)
+        .filter(centre => centre.isAvailable);
       centres && this.setState({ centres });
     });
   }
