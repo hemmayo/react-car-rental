@@ -67,7 +67,7 @@ class Profile extends Component {
 
   render() {
     const { email, username, phone, bvn, address, error } = this.state;
-    const isInvalid = email && username && phone && address;
+    const isInvalid = !email || !username || !phone || !address;
 
     return (
       <Layout type="no-center">

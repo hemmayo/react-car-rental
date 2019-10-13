@@ -15,6 +15,8 @@ const withAuthorization = condition => Component => {
             if (pathname === ROUTES.SIGNIN || pathname === ROUTES.SIGNUP) {
               this.props.history.push(ROUTES.DASHBOARD);
             }
+          } else {
+            this.props.history.push(ROUTES.SIGNIN);
           }
         },
         () => {

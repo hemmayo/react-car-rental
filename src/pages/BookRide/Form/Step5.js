@@ -26,6 +26,10 @@ class Step5 extends Component {
       });
   }
 
+  componentWillUnmount() {
+    this.props.firebase.cars().off();
+  }
+
   selectCar = (uid, rate) => {
     this.setState({ selectedCar: uid });
     this.props.editState("carId", uid);

@@ -112,7 +112,9 @@ class Step2 extends Component {
               >
                 <option value="">Select centre</option>
                 {centres.map(centre => (
-                  <option key={centre.uid}>{centre.name}</option>
+                  <option key={centre.uid} value={centre.location}>
+                    {centre.name}
+                  </option>
                 ))}
               </select>
             </div>

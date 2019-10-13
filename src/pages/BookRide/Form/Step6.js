@@ -26,6 +26,10 @@ class Step6 extends Component {
       });
   }
 
+  componentWillUnmount() {
+    this.props.firebase.drivers().off();
+  }
+
   selectDriver = (uid, rate) => {
     this.setState({ selectedDriver: uid });
     this.props.editState("driverId", uid);
