@@ -18,7 +18,7 @@ export default class MiniBar extends Component {
             className="uk-input uk-form rounded mt-1 text-sm"
             type="text"
             value={pickup}
-            name="dropoff"
+            readOnly={true}
           />
         </div>
       ),
@@ -29,6 +29,7 @@ export default class MiniBar extends Component {
             className="uk-input uk-form rounded mt-1 text-sm"
             type="text"
             value={dropoff}
+            readOnly={true}
           />
         </div>
       ),
@@ -40,6 +41,7 @@ export default class MiniBar extends Component {
             type="text"
             value={pickupDate}
             disabled={true}
+            readOnly={true}
           />
         </div>
       ),
@@ -51,6 +53,7 @@ export default class MiniBar extends Component {
             type="text"
             value={dropoffDate}
             disabled={true}
+            readOnly={true}
           />
         </div>
       )
