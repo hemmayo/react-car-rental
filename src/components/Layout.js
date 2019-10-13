@@ -17,7 +17,7 @@ const PageLayout = ({ children, type }) => (
       {children}
     </main>
     <footer className="uk-padding uk-background-muted uk-text-center">
-      ©2019 Car Rental created by Emma Popoola
+      ©2019 Car Rental
     </footer>
   </div>
 );

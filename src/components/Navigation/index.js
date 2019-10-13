@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { NavLink } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 
 import * as ROUTES from "../../constants/routes";
 import { AuthUserContext } from "../Session";
@@ -68,12 +68,12 @@ const GuestNav = () => (
       </NavLink>
     </li>
     <li>
-      <NavLink activeClassName="active" to={ROUTES.ABOUT}>
-        About
+      <NavLink activeClassName="active" to={ROUTES.LANDING}>
+        Services
       </NavLink>
     </li>
     <li>
-      <NavLink to={ROUTES.CONTACT}>Contact</NavLink>
+      <NavLink to={ROUTES.LANDING}>Contact</NavLink>
     </li>
     <li>
       <NavLink activeClassName="active" to={ROUTES.SIGNIN}>
@@ -89,8 +89,9 @@ class Navigation extends Component {
     const { firebase } = this.props;
     firebase.auth.currentUser &&
       firebase.user(firebase.auth.currentUser.uid).on("value", snapshot => {
-        this.setState(st => ({ user: snapshot.val(), loading: false }));
+        this.setState({ user: snapshot.val() });
       });
+    this.setState({ loading: false });
   }
 
   componentWillUnmount() {
@@ -106,9 +107,9 @@ class Navigation extends Component {
         {authUser => {
           return (
             <nav className="bg-primary" uk-navbar="true">
-              <a href="/" className="uk-navbar-item uk-logo">
-                Car Rental
-              </a>
+              <Link to="/" className="uk-navbar-item uk-logo">
+                <span className="text-xl text-gray-300">Car Rental</span>
+              </Link>
               <div className="uk-navbar-right uk-visible@s">
                 {loading ? (
                   <div uk-spinner=""></div>
