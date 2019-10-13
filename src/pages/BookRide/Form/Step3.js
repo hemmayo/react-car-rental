@@ -110,7 +110,7 @@ export default class Step3 extends Component {
             endDate={moment(dropoffDate)}
             endDateId="book_car_start_date"
             withFullScreenPortal={true}
-            orientation="vertical"
+            // orientation="vertical"
             onDatesChange={onDatesChange}
             focusedInput={this.state.focusedInput}
             onFocusChange={focusedInput => this.setState({ focusedInput })}

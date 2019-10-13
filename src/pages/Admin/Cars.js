@@ -23,6 +23,7 @@ Modal.setAppElement("#root");
 class Cars extends Component {
   state = {
     cars: null,
+    centres: [],
     loading: true,
     modalIsOpen: false,
     modalData: {},
@@ -32,15 +33,26 @@ class Cars extends Component {
 
   componentDidMount() {
     const { firebase } = this.props;
+
     firebase.cars().on("value", snapshot => {
       const cars = snapshotToArray(snapshot.val());
+      cars && cars.sort((a, b) => (a.manufacturer - b.manufacturer ? 1 : -1));
       this.setState({ cars, loading: false });
+    });
+
+    firebase.centres().on("value", snapshot => {
+      const centres = snapshotToArray(snapshot.val())
+        .sort((a, b) => a.name - b.name)
+        .filter(centre => centre.isAvailable);
+      centres && this.setState({ centres });
     });
   }
 
   componentWillUnmount() {
     const { firebase } = this.props;
+
     firebase.cars().off();
+    firebase.centres().off();
   }
 
   openModal = (action, car) => {
@@ -123,6 +135,7 @@ class Cars extends Component {
     const { route } = this.props;
     const {
       cars,
+      centres,
       loading,
       modalData,
       modalIsOpen,
@@ -406,7 +419,9 @@ class Cars extends Component {
                           required={true}
                         >
                           <option value="">Select branch</option>
-                          <option>Ikeja</option>
+                          {centres.map(centre => (
+                            <option>{centre.name}</option>
+                          ))}
                         </select>
                       </div>
                     </div>

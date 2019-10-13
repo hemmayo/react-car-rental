@@ -23,6 +23,7 @@ Modal.setAppElement("#root");
 class Drivers extends Component {
   state = {
     drivers: null,
+    centres: [],
     loading: true,
     modalIsOpen: false,
     modalData: {},
@@ -32,15 +33,25 @@ class Drivers extends Component {
 
   componentDidMount() {
     const { firebase } = this.props;
+
     firebase.drivers().on("value", snapshot => {
       const drivers = snapshotToArray(snapshot.val());
       this.setState({ drivers, loading: false });
+    });
+
+    firebase.centres().on("value", snapshot => {
+      const centres = snapshotToArray(snapshot.val())
+        .sort((a, b) => a.name - b.name)
+        .filter(centre => centre.isAvailable);
+      centres && this.setState({ centres });
     });
   }
 
   componentWillUnmount() {
     const { firebase } = this.props;
+
     firebase.drivers().off();
+    firebase.centres().off();
   }
 
   openModal = (action, driver) => {
@@ -128,6 +139,7 @@ class Drivers extends Component {
     const { route } = this.props;
     const {
       drivers,
+      centres,
       loading,
       modalData,
       modalIsOpen,
@@ -140,6 +152,8 @@ class Drivers extends Component {
       image,
       branch,
       gender,
+      licenseNumber,
+      yearsOfExperience,
       rate,
       address,
       phone
@@ -361,9 +375,53 @@ class Drivers extends Component {
                           value={branch}
                           required={true}
                         >
-                          <option value="">Select centre</option>
-                          <option>Ikeja</option>
+                          <option value="">Select branch</option>
+                          {centres.map(centre => (
+                            <option>{centre.name}</option>
+                          ))}
                         </select>
+                      </div>
+                    </div>
+
+                    <div className="uk-width-1-2@s">
+                      <label
+                        className="uk-form-label text-base"
+                        htmlFor="yearsOfExperience"
+                      >
+                        Years of Expr.
+                      </label>
+                      <div className="uk-form-controls">
+                        <input
+                          className="uk-input"
+                          id="yearsOfExperience"
+                          name="yearsOfExperience"
+                          type="number"
+                          min={1}
+                          onChange={this.onModalInputChange}
+                          value={yearsOfExperience}
+                          placeholder="Years of Experience"
+                          required={true}
+                        />
+                      </div>
+                    </div>
+                    <div className="uk-width-1-2@s">
+                      <label
+                        className="uk-form-label text-base"
+                        htmlFor="licenseNumber"
+                      >
+                        License Number
+                      </label>
+                      <div className="uk-form-controls">
+                        <input
+                          className="uk-input"
+                          id="licenseNumber"
+                          name="licenseNumber"
+                          type="text"
+                          value={licenseNumber}
+                          onChange={this.onModalInputChange}
+                          placeholder="License number"
+                          required={true}
+                        />
                       </div>
                     </div>
                     <div className="uk-width-1-1@s">
@@ -386,6 +444,7 @@ class Drivers extends Component {
                         />
                       </div>
                     </div>
+
                     <div className="uk-width-1-1@s">
                       <label
                         className="uk-form-label text-base"

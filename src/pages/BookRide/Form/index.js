@@ -38,14 +38,7 @@ class BookRideBase extends Component {
   };
 
   _next = () => {
-    const {
-      pickup,
-      dropoff,
-      pickupDate,
-      dropoffDate,
-      currentStep,
-      carId
-    } = this.state;
+    const { pickup, dropoff, pickupDate, age, currentStep, carId } = this.state;
 
     let canMove = false;
     let errorMessage;
@@ -64,7 +57,7 @@ class BookRideBase extends Component {
         errorMessage = "We'd love to know when you'll pick-up the car.";
         break;
       case 4:
-        canMove = dropoffDate.length > 0;
+        canMove = age.length > 0;
         errorMessage = "Please select your age range.";
         break;
       case 5:

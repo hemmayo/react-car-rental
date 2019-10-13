@@ -16,7 +16,7 @@ class Step5 extends Component {
             uid: key
           }));
           this.setState({
-            cars: carsList,
+            cars: carsList.filter(d => d.isAvailable),
             selectedCar: this.props.selectedCar,
             loading: false
           });
