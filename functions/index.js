@@ -10,9 +10,20 @@ admin.initializeApp();
 //   response.send("Hello from Firebase!");
 // });
 
+const snapshotToArray = snapshot => {
+  if (snapshot) {
+    const snapshotList = Object.keys(snapshot).map(key => ({
+      ...snapshot[key],
+      uid: key
+    }));
+    return snapshotList;
+  }
+  return null;
+};
+
 exports.driver_sensor_update = functions.https.onRequest(async (req, res) => {
   const { uid, lat, lng, speed } = req.body;
-  const ref = admin.database().ref(`drivers/${uid}`);
+  const ref = admin.database().ref(`drivers/${uid || 0}`);
   const sensorData = {
     lat: Number(lat),
     lng: Number(lng),
@@ -37,27 +48,25 @@ exports.driver_sensor_update = functions.https.onRequest(async (req, res) => {
   //   res.redirect(303, snapshot.ref.toString());
 });
 
-exports.car_sensor_update = functions.https.onRequest(async (req, res) => {
+exports.car_sensor_update = functions.https.onRequest((req, res) => {
   const { devAddr, lat, lng, angle, speed, temp } = req.body.payload_fields;
   const carRef = admin.database().ref(`cars`);
   const sensorData = {
-    lat: Number(lat),
-    lng: Number(lng),
-    angle: Number(angle),
-    speed: Number(speed),
-    temp: Number(temp),
+    ...(lat && { lat: Number(lat) }),
+    ...(lng && { lng: Number(lng) }),
+    ...(angle && { lat: Number(angle) }),
+    ...(speed && { speed: Number(speed) }),
+    ...(temp && { temp: Number(temp) }),
     lastUpdated: new Date().toString()
   };
 
-  await carRef
+  carRef
     .once("value")
     .then(snapshot => {
-      const cars = snapshotToArray(snapshot.val());
+      const cars = snapshotToArray(snapshot.val()).filter(car => car.sensorId);
 
       if (cars) {
-        let car = cars.filter(
-          car => car.sensorId.toUpperCase() === devAddr.toUpperCase()
-        );
+        let car = cars.filter(car => car.sensorId === devAddr);
 
         if (car.length > 0) {
           car = car[0];
