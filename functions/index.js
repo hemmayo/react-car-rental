@@ -11,12 +11,12 @@ admin.initializeApp();
 // });
 
 exports.driver_sensor_update = functions.https.onRequest(async (req, res) => {
-  const { uid, lat, lng, angle } = req.query;
+  const { uid, lat, lng, speed } = req.body;
   const ref = admin.database().ref(`drivers/${uid}`);
   const sensorData = {
     lat: Number(lat),
     lng: Number(lng),
-    angle: Number(angle),
+    speed: Number(speed),
     lastUpdated: new Date().toString()
   };
   await ref
@@ -38,24 +38,42 @@ exports.driver_sensor_update = functions.https.onRequest(async (req, res) => {
 });
 
 exports.car_sensor_update = functions.https.onRequest(async (req, res) => {
-  const { uid, lat, lng, angle } = req.query;
-  const ref = admin.database().ref(`cars/${uid}`);
+  const { devAddr, lat, lng, angle, speed, temp } = req.body.payload_fields;
+  const carRef = admin.database().ref(`cars`);
   const sensorData = {
     lat: Number(lat),
     lng: Number(lng),
     angle: Number(angle),
+    speed: Number(speed),
+    temp: Number(temp),
     lastUpdated: new Date().toString()
   };
-  await ref
+
+  await carRef
     .once("value")
     .then(snapshot => {
-      if (snapshot.exists()) {
-        ref.child("sensorData").set({ ...sensorData });
-        res.send("success");
-      } else {
-        res.send("driver doesn't exist");
+      const cars = snapshotToArray(snapshot.val());
+
+      if (cars) {
+        let car = cars.filter(
+          car => car.sensorId.toUpperCase() === devAddr.toUpperCase()
+        );
+
+        if (car.length > 0) {
+          car = car[0];
+
+          carRef
+            .child(car.uid)
+            .child("sensorData")
+            .set({ ...car.sensorData, ...sensorData });
+
+          res.send("success");
+        } else {
+          res.status(404).send("car doesn't exist");
+        }
+        return car;
       }
-      return sensorData;
+      return null;
     })
     .catch(error => {
       res.redirect(500, JSON.stringify(error));

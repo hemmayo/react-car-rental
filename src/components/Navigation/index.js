@@ -98,6 +98,7 @@ class Navigation extends Component {
     const { firebase } = this.props;
     firebase.user().off();
   }
+
   render() {
     const { firebase } = this.props;
     const { user, loading } = this.state;

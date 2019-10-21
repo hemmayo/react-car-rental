@@ -6,7 +6,7 @@ export default class SignUp extends Component {
   render() {
     return (
       <Layout>
-        <div className="my-4" style={{ maxWidth: "25rem", width: "100%" }}>
+        <div className="m-4" style={{ maxWidth: "25rem", width: "100%" }}>
           <SignUpForm />
         </div>
       </Layout>

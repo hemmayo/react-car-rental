@@ -151,6 +151,7 @@ class Cars extends Component {
       transmissionMode,
       rate,
       branch,
+      sensorId,
       noSeats
     } = modalData;
     const isInvalid =
@@ -425,7 +426,7 @@ class Cars extends Component {
                         </select>
                       </div>
                     </div>
-                    <div className="uk-width-1-1@s">
+                    <div className="uk-width-2-3@s">
                       <label
                         className="uk-form-label text-base"
                         htmlFor="image"
@@ -441,6 +442,26 @@ class Cars extends Component {
                           value={image}
                           onChange={this.onModalInputChange}
                           placeholder="Image URL"
+                          required={true}
+                        />
+                      </div>
+                    </div>
+                    <div className="uk-width-1-3@s">
+                      <label
+                        className="uk-form-label text-base"
+                        htmlFor="sensorId"
+                      >
+                        Sensor ID
+                      </label>
+                      <div className="uk-form-controls">
+                        <input
+                          className="uk-input"
+                          id="sensorId"
+                          name="sensorId"
+                          type="text"
+                          value={sensorId}
+                          onChange={this.onModalInputChange}
+                          placeholder="e.g 7824D7A9"
                           required={true}
                         />
                       </div>
