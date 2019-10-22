@@ -51,11 +51,19 @@ export default class CarMarker extends Component {
             <img src={img} className="h-6" style={style} alt="Car location" />
 
             <div uk-drop="pos: top">
-              <div className="flex flex-col p-4 border shadow rounded bg-gray-100 text-sm font-sans">
-                <span>Speed: {speed || "No data"}</span>
-                <span>Temperature: {temp + "°C" || "No data"}</span>
-                <span>Address: {address || "Not available"}</span>
-                <span>Last updated: {lastUpdated || "Not available"}</span>
+              <div className="flex flex-col justify-between p-4 border shadow rounded bg-gray-100 text-sm font-sans">
+                <h1 className="font-semibold text-base mb-2">Sensor data</h1>
+                <div className="flex flex-col pb-2">
+                  <span>Speed: {speed + "km/h" || "No data"}</span>
+                  <span>Temperature: {temp + "°C" || "No data"}</span>
+                  <span>Address: {address || "No data"}</span>
+                  <span>Last updated: {lastUpdated || "Not available"}</span>
+                </div>
+                <div className="flex justify-start">
+                  <button className="rounded py-2 px-3 bg-red-600 text-gray-100 hover:bg-red-700 capitalize outline-none">
+                    Stop engine
+                  </button>
+                </div>
               </div>
             </div>
           </>

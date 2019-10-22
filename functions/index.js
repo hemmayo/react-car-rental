@@ -59,7 +59,7 @@ exports.car_sensor_update = functions.https.onRequest((req, res) => {
     ...(angle && { angle: Number(angle) }),
     speed: Number(speed),
     ...(temp && { temp: Number(temp) }),
-    lastUpdated: new Date().toString()
+    lastUpdated: new Date().toGMTString()
   };
 
   carRef
