@@ -49,13 +49,15 @@ exports.driver_sensor_update = functions.https.onRequest(async (req, res) => {
 });
 
 exports.car_sensor_update = functions.https.onRequest((req, res) => {
-  const { devAddr, lat, lng, angle, speed, temp } = req.body.payload_fields;
+  const { lat, lng, angle, speed, temp } = req.body.payload_fields;
+  const devAddr = req.body.hardware_serial;
+
   const carRef = admin.database().ref(`cars`);
   const sensorData = {
     ...(lat && { lat: Number(lat) }),
     ...(lng && { lng: Number(lng) }),
-    ...(angle && { lat: Number(angle) }),
-    ...(speed && { speed: Number(speed) }),
+    ...(angle && { angle: Number(angle) }),
+    speed: Number(speed),
     ...(temp && { temp: Number(temp) }),
     lastUpdated: new Date().toString()
   };

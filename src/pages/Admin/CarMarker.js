@@ -13,7 +13,9 @@ export default class CarMarker extends Component {
   static defaultProps = {
     angle: 0,
     lat: 0,
-    lng: 0
+    lng: 0,
+    speed: 0,
+    temp: 0
   };
 
   state = {
@@ -33,7 +35,7 @@ export default class CarMarker extends Component {
     );
   }
   render() {
-    const { lat, lng, angle, lastUpdated } = this.props;
+    const { lat, lng, angle, speed, temp, lastUpdated } = this.props;
     const { address } = this.state;
 
     const style = {
@@ -47,9 +49,12 @@ export default class CarMarker extends Component {
         {
           <>
             <img src={img} className="h-6" style={style} alt="Car location" />
+
             <div uk-drop="pos: top">
               <div className="flex flex-col p-4 border shadow rounded bg-gray-100 text-sm font-sans">
-                <span>Current address: {address || "Not available"}</span>
+                <span>Speed: {speed || "No data"}</span>
+                <span>Temperature: {temp + "°C" || "No data"}</span>
+                <span>Address: {address || "Not available"}</span>
                 <span>Last updated: {lastUpdated || "Not available"}</span>
               </div>
             </div>
