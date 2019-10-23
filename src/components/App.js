@@ -12,6 +12,7 @@ import HireDriverPage from "../pages/HireDriver";
 import BookRidePage from "../pages/BookRide";
 import ProfilePage from "../pages/Profile";
 import OrdersPage from "../pages/Orders";
+import DriverPage from "../pages/Driver";
 import PasswordChangePage from "../pages/PasswordChange";
 
 import AdminHome from "../pages/Admin";
@@ -62,6 +63,10 @@ class App extends Component {
         <Route
           path={ROUTES.ADMIN.ORDERS}
           render={() => <AdminHome {...this.props} />}
+        />
+        <Route
+          path={ROUTES.DRIVER}
+          render={() => <DriverPage {...this.props} />}
         />
       </Router>
     );

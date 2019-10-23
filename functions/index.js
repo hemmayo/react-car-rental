@@ -28,7 +28,7 @@ exports.driver_sensor_update = functions.https.onRequest(async (req, res) => {
     lat: Number(lat),
     lng: Number(lng),
     speed: Number(speed),
-    lastUpdated: new Date().toString()
+    lastUpdated: new Date().toGMTString()
   };
   await ref
     .once("value")
@@ -37,7 +37,7 @@ exports.driver_sensor_update = functions.https.onRequest(async (req, res) => {
         ref.child("sensorData").set({ ...sensorData });
         res.send("success");
       } else {
-        res.send("driver doesn't exist");
+        res.status(404).send("driver doesn't exist");
       }
       return sensorData;
     })

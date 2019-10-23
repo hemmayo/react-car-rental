@@ -2,6 +2,7 @@ export const LANDING = "/";
 export const CONTACT = "/contact";
 export const ABOUT = "/about";
 export const DASHBOARD = "/home";
+export const DRIVER = "/track-driver";
 export const BOOKRIDE = "/book-a-ride";
 export const ORDERS = "/orders";
 export const HIREDRIVER = "/hire-driver";
