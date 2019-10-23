@@ -68,7 +68,9 @@ exports.car_sensor_update = functions.https.onRequest((req, res) => {
       const cars = snapshotToArray(snapshot.val()).filter(car => car.sensorId);
 
       if (cars) {
-        let car = cars.filter(car => car.sensorId === devAddr);
+        let car = cars.filter(
+          car => car.sensorId.toUpperCase() === devAddr.toUpperCase()
+        );
 
         if (car.length > 0) {
           car = car[0];
