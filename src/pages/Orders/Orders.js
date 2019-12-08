@@ -161,7 +161,9 @@ class Orders extends Component {
                     </span>
                   </div>
                 </td>
-                <td>&#8358;{numberWithCommas(Number(order.price))}</td>
+                <td>
+                  &#8358;{numberWithCommas(Number(order.price).toFixed(2))}
+                </td>
 
                 <td>
                   {order.status === "not_paid" ? (

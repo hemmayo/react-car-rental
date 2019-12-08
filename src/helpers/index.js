@@ -22,7 +22,7 @@ const getPrice = (rate, start, end) => {
 
   const duration = moment.duration(end.diff(start));
   const hours = duration.asHours();
-  const price = parseInt(hours * rate);
+  const price = parseInt(hours * rate).toFixed(2);
   return typeof price === "number" ? price : 0;
 };
 
